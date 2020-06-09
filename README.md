@@ -11,6 +11,3 @@ Start building your Fullstack MERN applications as soon as possible, with the Me
 
 ## Tools
 express, mongoose, javascript, reactjs, node, concurrently, nodemon
-
-## View
-[The MovieDB](https://the-movie-db-react.netlify.com/)
