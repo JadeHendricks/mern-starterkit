@@ -3,12 +3,15 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const connectDB = async () => {
+
+	const DB = process.env.MONGO_URI.replace('<PASSWORD>', process.env.MONGO_PASSWORD);
+
 	try {
-		await mongoose.connect(process.env.MONGO_URI, {
+		await mongoose.connect(DB, {
 			useNewUrlParser: true,
 			useCreateIndex: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true
+      		useFindAndModify: false,
+      		useUnifiedTopology: true
 		});
 
 		console.log('MongoDB Connected...');
