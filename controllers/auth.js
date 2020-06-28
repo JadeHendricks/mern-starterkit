@@ -49,3 +49,56 @@ exports.signup = async (req, res, next) => {
         });
     }
 }
+
+exports.accountActivation = async (req, res, next) => {
+    const { token } = req.body;
+    if (!token) {
+        return res.status(400).json({
+            message: 'No token associated to this account'
+        });
+    }
+
+    try {
+        const decoded = await jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION);
+
+        const { name, email, password } = decoded;
+        const newUser = await User.create({ name, email, password });
+
+        res.status(201).json({
+            message: 'Signup success. Please signin'
+        });
+        
+    } catch (err) {
+        console.error(err);
+        res.status(401).json({
+            message: 'Expired Link. Signup again'
+        });
+    }
+}
+
+exports.signin = async (req, res, next) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email: email });
+
+        if (!user || !user.authenticate(password)) {
+            return res.status(400).json({
+                message: 'Email or Password is incorrect.'
+            });
+        } 
+
+        const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const { _id, name, user_email, role } = user;
+
+        res.status(200).json({
+            token,
+            user: { _id, name, user_email, role }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({
+            error: err
+        });
+    }
+}
