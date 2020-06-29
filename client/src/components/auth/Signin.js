@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { authenticate, isAuth } from './helpers';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -19,8 +20,11 @@ const Signin = () => {
 
         try {
             const res = await axios.post('/api/signin', body, config);
-            setValues({ email: '', password: '', buttonText: 'Signing in...' });
-            toast.success(`Hey ${res.data.user.name}, welcome to the authntication boilerplate`);
+
+            authenticate(res, () => {
+                setValues({ email: '', password: '', buttonText: 'Signing in...' });
+                toast.success(`Hey ${res.data.user.name}, welcome to the authentication boilerplate`);
+            });
 
         } catch (err) {
             setValues({ email: '', password: '', buttonText: 'Sign in' });
@@ -31,6 +35,7 @@ const Signin = () => {
     return (
         <Fragment>
             <div className="col-md-6 offset-md-3">
+                { isAuth() ? <Redirect to='/' /> : null }
                 <h1 className="pt-5 pb-3 text-center">Sign in</h1>
                 <form onSubmit={ handleOnSubmit }>
                     <div className="form-group">

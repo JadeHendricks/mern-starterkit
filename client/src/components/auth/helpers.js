@@ -41,13 +41,6 @@ export const authenticate = (response, next) => {
     next();
 }
 
-export const authenticate = (response, next) => {
-    //console.log(response.data);
-    setCookie('token', response.data.token);
-    setLocalStorage('user', response.data.user);
-    next();
-}
-
 export const isAuth = () => {
     if (window !== 'undefined') {
         const cookie = getCookie('token');
@@ -59,4 +52,10 @@ export const isAuth = () => {
             }
         }
     }
+}
+
+export const signout = next => {
+    removeCookie('token');
+    removeLocalStorage('user');
+    next();
 }
