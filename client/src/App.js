@@ -6,6 +6,8 @@ import Base from './layouts/Base';
 import Signup from './components/auth/Signup';
 import Signin from './components/auth/Signin';
 import Activate from './components/auth/Activate';
+import Private from './components/auth/Private';
+import PrivateRoute from './components/auth/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
             <Route path='/signup' exact component={ Signup } />
             <Route path='/signin' exact component={ Signin } />
             <Route path='/auth/activate/:token' exact component={ Activate } />
+            <PrivateRoute path='/private' exact component={ Private } />
           </Switch>
         </div>
       </Fragment>
