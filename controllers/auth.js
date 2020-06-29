@@ -14,12 +14,12 @@ exports.signup = async (req, res, next) => {
         const user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
-                error: 'Email Address already exists'
+                message: 'Email Address already exists'
             });
         }
 
         const token = jwt.sign({ name, email, password }, process.env.JWT_ACCOUNT_ACTIVATION, {
-           expiresIn: '10m'
+           expiresIn: 3600000
         });
 
         const emailData = {
@@ -45,7 +45,7 @@ exports.signup = async (req, res, next) => {
     } catch (err) {
         console.error(err);
         return res.status(404).json({
-            error: err.message
+            message: err.message
         });
     }
 }
@@ -62,7 +62,7 @@ exports.accountActivation = async (req, res, next) => {
         const decoded = await jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION);
 
         const { name, email, password } = decoded;
-        const newUser = await User.create({ name, email, password });
+        await User.create({ name, email, password });
 
         res.status(201).json({
             message: 'Signup success. Please signin'
@@ -87,7 +87,7 @@ exports.signin = async (req, res, next) => {
             });
         } 
 
-        const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: 3600000 });
         const { _id, name, user_email, role } = user;
 
         res.status(200).json({
@@ -98,7 +98,7 @@ exports.signin = async (req, res, next) => {
     } catch (err) {
         console.error(err);
         res.status(400).json({
-            error: err
+            message: err
         });
     }
 }

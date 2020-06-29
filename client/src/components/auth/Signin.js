@@ -4,9 +4,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Signup = () => {
-    const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Signup' });
-    const { name, email, password, buttonText } = values;
+const Signin = () => {
+    const [values, setValues] = useState({ email: '', password: '', buttonText: 'Sign in' });
+    const { email, password, buttonText } = values;
 
     const handleOnChange = e => setValues({ ...values, [e.target.name]: e.target.value });
 
@@ -15,15 +15,15 @@ const Signup = () => {
         setValues({ ...values, buttonText: 'Submitting...' });
 
         const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ name, email, password });
+        const body = JSON.stringify({ email, password });
 
         try {
-            const res = await axios.post('/api/signup', body, config);
-            setValues({ name: '', email: '', password: '', buttonText: 'Submitted' });
-            toast.success(res.data.message);
+            const res = await axios.post('/api/signin', body, config);
+            setValues({ email: '', password: '', buttonText: 'Signing in...' });
+            toast.success(`Hey ${res.data.user.name}, welcome to the authntication boilerplate`);
 
         } catch (err) {
-            setValues({ name: '', email: '', password: '', buttonText: 'Submit' });
+            setValues({ email: '', password: '', buttonText: 'Sign in' });
             toast.error(err.response.data.message);
         }
     }
@@ -31,12 +31,8 @@ const Signup = () => {
     return (
         <Fragment>
             <div className="col-md-6 offset-md-3">
-                <h1 className="pt-5 pb-3 text-center">Signup</h1>
+                <h1 className="pt-5 pb-3 text-center">Sign in</h1>
                 <form onSubmit={ handleOnSubmit }>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="name">Name</label>
-                        <input onChange={ handleOnChange } name="name" placeholder="Name" value={ name } type="text" className="form-control"/>
-                    </div>
                     <div className="form-group">
                         <label className="text-muted" htmlFor="email">Email</label>
                         <input onChange={ handleOnChange } placeholder="Youremail@example.com" name="email" value={ email } type="email" className="form-control"/>
@@ -54,4 +50,4 @@ const Signup = () => {
     )
 }
 
-export default Signup;
+export default Signin;

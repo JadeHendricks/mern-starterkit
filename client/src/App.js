@@ -4,17 +4,24 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navigation from './layouts/Navigation';
 import Base from './layouts/Base';
 import Signup from './components/auth/Signup';
+import Signin from './components/auth/Signin';
+import Activate from './components/auth/Activate';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
     <Router>
       <Fragment>
+        <ToastContainer />
         <Navigation />
-        <Switch>
-          <Route path='/' exact component={ Base } />
-          <Route path='/signup' exact component={ Signup } />
-          <Route path='/signin' exact component={ Base } />
-        </Switch>
+        <div className="container">
+          <Switch>
+            <Route path='/' exact component={ Base } />
+            <Route path='/signup' exact component={ Signup } />
+            <Route path='/signin' exact component={ Signin } />
+            <Route path='/auth/activate/:token' exact component={ Activate } />
+          </Switch>
+        </div>
       </Fragment>
     </Router>
   );
