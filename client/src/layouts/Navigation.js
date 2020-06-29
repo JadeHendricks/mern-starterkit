@@ -18,10 +18,22 @@ const Navigation = ({ history }) => {
                     </li>
                 </Fragment>
             )}
-            { isAuth() && (
+
+            { isAuth() && isAuth().role === 'admin' && (
                 <Fragment>
                     <li className='nav-item'>
-                    <span style={{ cursor: 'pointer', color: '#fff' }} >{isAuth().name}</span>
+                        <Link activeClassName='active text-dark' className='nav-link' to='/admin'>{ isAuth().name }</Link>
+                    </li>
+                    <li className='nav-item'>
+                        <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Sign out</span>
+                    </li>
+                </Fragment>
+            )}
+
+            { isAuth() && isAuth().role === 'subscriber' && (
+                <Fragment>
+                    <li className='nav-item'>
+                        <Link activeClassName='active text-dark' className='nav-link' to='/private'>{ isAuth().name }</Link>
                     </li>
                     <li className='nav-item'>
                         <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Sign out</span>

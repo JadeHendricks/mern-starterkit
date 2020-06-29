@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Signin = () => {
+const Signin = ({ history }) => {
     const [values, setValues] = useState({ email: '', password: '', buttonText: 'Sign in' });
     const { email, password, buttonText } = values;
 
@@ -24,6 +24,10 @@ const Signin = () => {
             authenticate(res, () => {
                 setValues({ email: '', password: '', buttonText: 'Signing in...' });
                 toast.success(`Hey ${res.data.user.name}, welcome to the authentication boilerplate`);
+                setTimeout(() => {
+                    isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
+                }, 5500);
+
             });
 
         } catch (err) {
@@ -35,7 +39,6 @@ const Signin = () => {
     return (
         <Fragment>
             <div className="col-md-6 offset-md-3">
-                { isAuth() ? <Redirect to='/' /> : null }
                 <h1 className="pt-5 pb-3 text-center">Sign in</h1>
                 <form onSubmit={ handleOnSubmit }>
                     <div className="form-group">

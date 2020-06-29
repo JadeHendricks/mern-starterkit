@@ -1,11 +1,11 @@
 import React from 'react';
 
- const Private = () => {
+ const Admin = () => {
     return (
         <h1>
-            SHHHHHHHHHH.
+            ADMIN PAGE.
         </h1>
     )
 }
 
-export default Private;
+export default Admin;
