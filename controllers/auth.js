@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
+const _ = require('lodash');
 
 dotenv.config();
 sendGridMail.setApiKey(process.env.SG_API_KEY);
@@ -84,7 +85,7 @@ exports.signin = async (req, res, next) => {
 
         //TODO - CHECK PASSWORD
         //if (!user || !user.authenticate(password)) {
-        if (!user) {
+        if (!user || password !== user.password) {
             return res.status(400).json({
                 message: 'Email or Password is incorrect.'
             });
@@ -112,19 +113,101 @@ exports.requireSignin = expressJwt({
 });
 
 exports.adminOnlyRoutes = async (req, res, next) => {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-        return res.status(400).json({
-            message: 'User not found'
-        });
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(400).json({
+                message: 'User not found'
+            });
+        }
+    
+        if (user.role !== 'admin') {
+            return res.status(400).json({
+                message: 'Admin resource. Access denied.'
+            });
+        }
+    
+        req.profile = user;
+        next();
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({
+            message: 'Server Error'
+        })
     }
 
-    if (user.role !== 'admin') {
-        return res.status(400).json({
-            message: 'Admin resource. Access denied.'
+}
+
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({
+                message: 'User does not exist'
+            });
+        }
+    
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PASSWORD, {
+            expiresIn: 3600000
+         });
+    
+         const emailData = {
+             from: process.env.EMAIL_FROM,
+             to: email,
+             subject: `Password Reset link`,
+             html: `
+             <h1>Please user the following link to reset your password</h1>
+             <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
+             <hr/>
+             <p>This email may contain sensitive information</p>
+             <p>${process.env.CLIENT_URL}</p>
+             `
+         }
+    
+         await user.updateOne({ resetPasswordLink: token });
+    
+         await sendGridMail.send(emailData);
+         res.status(200).json({
+             message: `Email has been sent to ${email}. Follow the instructions to reset your password`
+         });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({
+            message: 'Server Error'
+        })
+    }
+}
+
+exports.resetPassword = async (req, res) => {
+    const { resetPasswordLink, newPassword } = req.body;
+
+    try {
+        if (resetPasswordLink) {
+            const decoded = await jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION);
+            let user = await User.findById(decoded._id);
+            if (!user) {
+                return res.status(400).json({
+                    message: 'User not found'
+                });
+            }
+    
+            const updatedFields = {
+                password: newPassword,
+                resetPasswordLink: ''
+            }
+    
+            user = _.extend(user, updatedFields);
+            await user.save();
+    
+            res.status(200).json({
+                message: 'Password has been updated'
+            })
+        }   
+    } catch (err) {
+        console.error(err.message);
+        res.status(401).json({
+            message: err.message
         });
     }
-
-    req.profile = user;
-    next();
 }
