@@ -15,7 +15,7 @@ const userScheama = new mongoose.Schema({
         lowercase: true,
         unique: true
     },
-    hashed_password: {
+    password: {
         type: String,
         required: true,
     },
@@ -31,37 +31,37 @@ const userScheama = new mongoose.Schema({
 }, { timestamps: true });
 
 //Virtuals
-userScheama.virtual('password')
-    .set(function(password) {
-        this._password = password;
-        this.salt = this.makeSalt();
-        this.hashed_password = this.encryptPassword(password);
-    })
-    .get(function() {
-        return this._password;
-    });
+// userScheama.virtual('password')
+//     .set(function(password) {
+//         this._password = password;
+//         this.salt = this.makeSalt();
+//         this.hashed_password = this.encryptPassword(password);
+//     })
+//     .get(function() {
+//         return this._password;
+//     });
 
 //Methods
-userScheama.methods = {
+// userScheama.methods = {
 
-    authenticate: function (plainTextPassword) {
-        return this.encryptPassword(plainTextPassword) === this.hashed_password;
-    },
+//     // authenticate: function (plainTextPassword) {
+//     //     return this.encryptPassword(plainTextPassword) === this.hashed_password;
+//     // },
 
-    makeSalt: function() {
-        return Math.round(new Date().valueOf * Math.random()) + '';
-    },
+//     // makeSalt: function() {
+//     //     return Math.round(new Date().valueOf * Math.random()) + '';
+//     // },
 
-    encryptPassword: function (password) {
-        if (!password) return false;
-        try {
-            return crypto.createHmac('sha1', this.salt)
-                .update(password)
-                .digest('hex');
-        } catch (err) {
-            return false;
-        }
-    }
-}
+//     // encryptPassword: function (password) {
+//     //     if (!password) return false;
+//     //     try {
+//     //         return crypto.createHmac('sha1', this.salt)
+//     //             .update(password)
+//     //             .digest('hex');
+//     //     } catch (err) {
+//     //         return false;
+//     //     }
+//     // }
+// }
 
 module.exports = User = mongoose.model('User', userScheama);

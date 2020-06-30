@@ -82,7 +82,9 @@ exports.signin = async (req, res, next) => {
     try {
         const user = await User.findOne({ email: email });
 
-        if (!user || !user.authenticate(password)) {
+        //TODO - CHECK PASSWORD
+        //if (!user || !user.authenticate(password)) {
+        if (!user) {
             return res.status(400).json({
                 message: 'Email or Password is incorrect.'
             });
