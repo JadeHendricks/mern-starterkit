@@ -54,6 +54,16 @@ export const isAuth = () => {
     }
 }
 
+export const updateUser = (response, next) => {
+    if (window !== 'undefined') {
+        let user = JSON.parse(localStorage.getItem('user'));
+        user = response.data;
+        localStorage.setItem('user', JSON.stringify(user));
+    }
+
+    next();
+}
+
 export const signout = next => {
     removeCookie('token');
     removeLocalStorage('user');
