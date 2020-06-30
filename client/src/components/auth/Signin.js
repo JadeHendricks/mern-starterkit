@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import { authenticate, isAuth } from './helpers';
-import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';

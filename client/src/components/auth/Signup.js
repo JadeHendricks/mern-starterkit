@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { isAuth } from './helpers';
 import axios from 'axios';
 import { toast } from 'react-toastify';

@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
 
@@ -101,4 +102,27 @@ exports.signin = async (req, res, next) => {
             message: err
         });
     }
+}
+
+exports.requireSignin = expressJwt({
+    //validate token and makes data available in req.user
+    secret: process.env.JWT_SECRET
+});
+
+exports.adminOnlyRoutes = async (req, res, next) => {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+        return res.status(400).json({
+            message: 'User not found'
+        });
+    }
+
+    if (user.role !== 'admin') {
+        return res.status(400).json({
+            message: 'Admin resource. Access denied.'
+        });
+    }
+
+    req.profile = user;
+    next();
 }

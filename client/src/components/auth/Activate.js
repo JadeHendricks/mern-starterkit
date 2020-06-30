@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -17,7 +16,7 @@ const Activate = ({ match }) => {
             setValues({  ...values, name, token });
         }
 
-    }, []);
+    }, [match.params.token, values]);
 
     const handleActivationClick = async () => {
         const config = { headers: {'Content-Type': 'application/json'} };

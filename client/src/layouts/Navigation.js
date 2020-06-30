@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link, withRouter, NavLink } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import { isAuth, signout } from '../components/auth/helpers';
 
 const Navigation = ({ history }) => {
@@ -22,7 +22,7 @@ const Navigation = ({ history }) => {
             { isAuth() && isAuth().role === 'admin' && (
                 <Fragment>
                     <li className='nav-item'>
-                        <Link activeClassName='active text-dark' className='nav-link' to='/admin'>{ isAuth().name }</Link>
+                        <NavLink activeClassName='active text-dark' className='nav-link' to='/admin'>{ isAuth().name }</NavLink>
                     </li>
                     <li className='nav-item'>
                         <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Sign out</span>
@@ -33,7 +33,7 @@ const Navigation = ({ history }) => {
             { isAuth() && isAuth().role === 'subscriber' && (
                 <Fragment>
                     <li className='nav-item'>
-                        <Link activeClassName='active text-dark' className='nav-link' to='/private'>{ isAuth().name }</Link>
+                        <NavLink activeClassName='active text-dark' className='nav-link' to='/private'>{ isAuth().name }</NavLink>
                     </li>
                     <li className='nav-item'>
                         <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Sign out</span>
