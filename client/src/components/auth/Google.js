@@ -22,7 +22,7 @@ const Google = ({ informParent }) => {
         <GoogleLogin
             clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
             render={renderProps => (
-                <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="btn btn-danger btn-llg btn-block">Login with Google</button>
+                <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="btn btn-danger btn-lg btn-block">Login with Google</button>
             )}
             onSuccess={responseGoogle}
             onFailure={responseGoogle}

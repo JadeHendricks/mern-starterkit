@@ -4,6 +4,7 @@ const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
 const _ = require('lodash');
+const fetch = require('node-fetch');
 const { OAuth2Client } = require('google-auth-library');
 
 dotenv.config();
@@ -239,8 +240,6 @@ exports.googleLogin = async (req, res) => {
     
                 user = new User({ name: response.payload.name, email: response.payload.email, password });
                 user.save();
-
-                console.log(user);
     
                 const { _id, email, name, role } = user;
     
@@ -261,5 +260,57 @@ exports.googleLogin = async (req, res) => {
                 error: err.message,
                 message: 'Google Login Failed. Try Again!'
             });  
+    }
+}
+
+exports.facebookLogin = async (req, res) => {
+    const { accessToken, userID } = req.body;
+
+    //this will give us the user profile
+    const url = `https://graph.facebook.com/v2.11/${userID}/?fields=id,name,email&access_token=${accessToken}`;
+
+    try {
+        const response = await fetch(url, { method: 'GET'})
+        const data = await response.json();
+
+        let user = await User.findOne({ email: data.email });
+
+        if (user) {
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+                expiresIn: 3600000
+            });
+            const { _id, email, name, role } = user;
+
+            res.status(200).json({
+                token,
+                user: { _id, email, name, role }
+            }); 
+        }
+
+        if (!user) {
+            const password = data.email + process.env.JWT_SECRET;
+    
+            user = new User({ name: data.name, email: data.email, password });
+            user.save();
+
+            const { _id, email, name, role } = user;
+
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+                expiresIn: 3600000
+            });
+
+
+            res.status(200).json({
+                token,
+                user: { _id, email, name, role }
+            });
+        }
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({
+            error: err.message,
+            message: 'Facebook Login Failed. Try Again!'
+        });  
     }
 }
