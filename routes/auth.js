@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { signup, signin, accountActivation, forgotPassword, resetPassword } = require('../controllers/auth');
+const { signup, signin, accountActivation, forgotPassword, resetPassword, googleLogin } = require('../controllers/auth');
 const { runValidation } = require('../validators/index');
 const { 
     userSignupValidator, userSigninValidator, 
@@ -25,5 +25,9 @@ router
 router
     .route('/reset-password')
     .put(resetPasswordValidator, runValidation, resetPassword)
+
+router
+    .route('/google-login')
+    .post(googleLogin)
 
 module.exports = router;

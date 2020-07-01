@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { authenticate, isAuth } from './helpers';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Google from './Google';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -10,6 +11,16 @@ const Signin = ({ history }) => {
     const { email, password, buttonText } = values;
 
     const handleOnChange = e => setValues({ ...values, [e.target.name]: e.target.value });
+
+    const informParent = reponse => {
+        authenticate(reponse, () => {
+            console.log(reponse);
+            toast.success(`Hey ${reponse.data.user.name}, welcome to the authentication boilerplate`);
+            setTimeout(() => {
+                isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
+            }, 5500);
+        });
+    }
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
@@ -40,6 +51,7 @@ const Signin = ({ history }) => {
         <Fragment>
             <div className="col-md-6 offset-md-3">
                 <h1 className="pt-5 pb-3 text-center">Sign in</h1>
+                <Google informParent={ informParent }/>
                 <form onSubmit={ handleOnSubmit }>
                     <div className="form-group">
                         <label className="text-muted" htmlFor="email">Email</label>
@@ -55,6 +67,7 @@ const Signin = ({ history }) => {
                 </form>
                 <br />
                 <Link to='/forgot-password' className='btn btn-sm btn-outline-danger'>Forgot password</Link>
+
             </div>
         </Fragment>
     )

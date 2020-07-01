@@ -4,6 +4,7 @@ const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
 const _ = require('lodash');
+const { OAuth2Client } = require('google-auth-library');
 
 dotenv.config();
 sendGridMail.setApiKey(process.env.SG_API_KEY);
@@ -208,5 +209,59 @@ exports.resetPassword = async (req, res) => {
         res.status(401).json({
             message: err.message
         });
+    }
+}
+
+const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+exports.googleLogin = async (req, res, next) => {
+    const { idToken } = req.body;
+    console.log("req.body", req.body);
+
+    try {
+        const response = await client.verifyIdToken({idToken, audience: process.env.REACT_APP_GOOGLE_CLIENT_ID});   
+        const { email_verified, name, email } = response.payload;
+
+        if (email_verified) {
+            let user = await User.findOne({ email });
+
+            if (user) {
+                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+                    expiresIn: 3600000
+                });
+                const { _id, email, name, role } = user;
+    
+                res.status(200).json({
+                    token,
+                    user: { _id, email, name, role }
+                });
+            } else {
+                //create a new user via google
+                let password = email + process.env.JWT_SECRET;
+
+                user = await user.create({
+                    name,
+                    email,
+                    password
+                });
+
+                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+                    expiresIn: 3600000
+                });
+
+                const { _id, email, name, role } = user;
+
+                res.status(200).json({
+                    token,
+                    user: { _id, email, name, role }
+                });
+            }
+        }
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(400).json({
+            error: err.message,
+            message: 'Google Login Failed. Try Again!'
+        });  
     }
 }
