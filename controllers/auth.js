@@ -148,7 +148,7 @@ exports.forgotPassword = async (req, res) => {
             });
         }
     
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PASSWORD, {
+        const token = jwt.sign({ _id: user._id, name: user.name }, process.env.JWT_RESET_PASSWORD, {
             expiresIn: 3600000
          });
     
@@ -183,9 +183,8 @@ exports.resetPassword = async (req, res) => {
     const { resetPasswordLink, newPassword } = req.body;
 
     try {
-        if (resetPasswordLink) {
-            const decoded = await jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION);
-            let user = await User.findById(decoded._id);
+        if (resetPasswordLink && await jwt.verify(resetPasswordLink, process.env.JWT_RESET_PASSWORD)) {
+            let user = await User.findOne({ resetPasswordLink });
             if (!user) {
                 return res.status(400).json({
                     message: 'User not found'

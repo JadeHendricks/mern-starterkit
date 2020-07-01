@@ -10,6 +10,8 @@ import Activate from './components/auth/Activate';
 import Private from './components/auth/Private';
 import PrivateRoute from './components/auth/PrivateRoute';
 import AdminRoute from './components/auth/AdminRoute';
+import ForgotPassword from './components/auth/Forgot';
+import ResetPassword from './components/auth/Reset';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
             <Route path='/auth/activate/:token' exact component={ Activate } />
             <PrivateRoute path='/private' exact component={ Private } />
             <AdminRoute path='/admin' exact component={ Admin } />
+            <Route path='/forgot-password' exact component={ ForgotPassword } />
+            <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
           </Switch>
         </div>
       </Fragment>

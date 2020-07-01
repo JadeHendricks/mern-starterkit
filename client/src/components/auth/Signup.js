@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isAuth } from './helpers';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -51,6 +52,8 @@ const Signup = () => {
                     <button className="btn btn-primary" type="submit">{ buttonText }</button>
                     </div>
                 </form>
+                <br />
+                <Link to='/forgot-password' className='btn btn-sm btn-outline-danger'>Forgot password</Link>
             </div>
         </Fragment>
     )
