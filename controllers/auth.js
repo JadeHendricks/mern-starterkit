@@ -213,16 +213,14 @@ exports.resetPassword = async (req, res) => {
 }
 
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
-exports.googleLogin = async (req, res, next) => {
+exports.googleLogin = async (req, res) => {
     const { idToken } = req.body;
-    console.log("req.body", req.body);
 
     try {
-        const response = await client.verifyIdToken({idToken, audience: process.env.REACT_APP_GOOGLE_CLIENT_ID});   
-        const { email_verified, name, email } = response.payload;
+        const response = await client.verifyIdToken({ idToken, audience: process.env.REACT_APP_GOOGLE_CLIENT_ID });   
 
-        if (email_verified) {
-            let user = await User.findOne({ email });
+        if (response.payload.email_verified) {
+            let user = await User.findOne({ email: response.payload.email });
 
             if (user) {
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -234,34 +232,34 @@ exports.googleLogin = async (req, res, next) => {
                     token,
                     user: { _id, email, name, role }
                 });
-            } else {
-                //create a new user via google
-                let password = email + process.env.JWT_SECRET;
+            } 
 
-                user = await user.create({
-                    name,
-                    email,
-                    password
-                });
+            if (!user) {
+                const password = response.payload.email + process.env.JWT_SECRET;
+    
+                user = new User({ name: response.payload.name, email: response.payload.email, password });
+                user.save();
 
+                console.log(user);
+    
+                const { _id, email, name, role } = user;
+    
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
                     expiresIn: 3600000
                 });
-
-                const { _id, email, name, role } = user;
-
+    
+    
                 res.status(200).json({
                     token,
                     user: { _id, email, name, role }
                 });
             }
         }
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(400).json({
-            error: err.message,
-            message: 'Google Login Failed. Try Again!'
-        });  
+        } catch (err) {
+            console.error(err.message);
+            res.status(400).json({
+                error: err.message,
+                message: 'Google Login Failed. Try Again!'
+            });  
     }
 }
