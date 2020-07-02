@@ -3,7 +3,7 @@ import { authenticate, isAuth } from './helpers';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Google from './Google';
-import Facebook from './/Facebook';
+import Facebook from './Facebook';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -49,27 +49,42 @@ const Signin = ({ history }) => {
     
     return (
         <Fragment>
-            <div className="col-md-6 offset-md-3">
-                <h1 className="pt-5 pb-3 text-center">Sign in</h1>
-                <Google informParent={ informParent }/>
-                <Facebook informParent={ informParent } />
-                <form onSubmit={ handleOnSubmit }>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="email">Email</label>
-                        <input onChange={ handleOnChange } placeholder="Youremail@example.com" name="email" value={ email } type="email" className="form-control"/>
+            <section className="py-5">
+                <div className="col-md-8 offset-md-2 col-sm-12">
+                    <div className="card border-secondary mb-3">
+                        <div className="card-header">Sign in</div>
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-sm-6 col-12">
+                                    <Google informParent={ informParent }/>
+                                </div>
+                                <div className="col-sm-6 col-12">
+                                    <Facebook informParent={ informParent } />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12">
+                                    <form onSubmit={ handleOnSubmit }>
+                                        <div className="form-group">
+                                            <label className="text-muted" htmlFor="email">Email</label>
+                                            <input onChange={ handleOnChange } placeholder="Youremail@example.com" name="email" value={ email } type="email" className="form-control"/>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="text-muted" htmlFor="password">Password</label>
+                                            <input onChange={ handleOnChange } placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
+                                        </div>
+                                        <div>
+                                        <button className="btn btn-primary" type="submit">{ buttonText }</button>
+                                        </div>
+                                    </form>
+                                    <hr />
+                                    <Link to='/forgot-password' className='btn btn-sm btn-outline-danger'>Forgot password</Link>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="password">Password</label>
-                        <input onChange={ handleOnChange } placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
-                    </div>
-                    <div>
-                    <button className="btn btn-primary" type="submit">{ buttonText }</button>
-                    </div>
-                </form>
-                <br />
-                <Link to='/forgot-password' className='btn btn-sm btn-outline-danger'>Forgot password</Link>
-
-            </div>
+                </div>
+            </section>
         </Fragment>
     )
 }
