@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/UserModel');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
@@ -11,7 +11,7 @@ dotenv.config();
 sendGridMail.setApiKey(process.env.SG_API_KEY);
 
 //Signup - email work flow
-exports.signup = async (req, res, next) => {
+exports.register = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
@@ -54,7 +54,7 @@ exports.signup = async (req, res, next) => {
     }
 }
 
-exports.accountActivation = async (req, res, next) => {
+exports.accountActivation = async (req, res) => {
     const { token } = req.body;
     if (!token) {
         return res.status(400).json({
@@ -80,7 +80,7 @@ exports.accountActivation = async (req, res, next) => {
     }
 }
 
-exports.signin = async (req, res, next) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email: email });

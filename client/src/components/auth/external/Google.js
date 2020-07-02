@@ -9,10 +9,9 @@ const Google = ({ informParent }) => {
         const body = JSON.stringify({ idToken: response.tokenId });
 
         try {
-            const res = await axios.post('/api/google-login', body, config);   
+            const res = await axios.post('/api/auth/google-login', body, config);   
             informParent(res);
         } catch (err) {
-            console.log("error", err);
             console.error(err.response);
         } 
     }
@@ -21,11 +20,11 @@ const Google = ({ informParent }) => {
         <div className='pb-3'>
             <GoogleLogin
                 clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
-                render={renderProps => (
-                    <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="btn btn-outline-danger btn-block">Login with Google</button>
+                render={ renderProps => (
+                    <button onClick={ renderProps.onClick } disabled={ renderProps.disabled } className="btn btn-danger btn-block">Login with Google</button>
                 )}
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
+                onSuccess={ responseGoogle }
+                onFailure={ responseGoogle }
                 cookiePolicy={'single_host_origin'}
             />
         </div>

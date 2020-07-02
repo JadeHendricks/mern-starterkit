@@ -4,8 +4,8 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+const authRouter = require('./routes/authRoute');
+const userRouter = require('./routes/userRoute');
 
 dotenv.config();
 const connectDB = require('./db');
@@ -18,5 +18,5 @@ app.use(morgan('dev'));
 app.use(express.json());
 if (process.env.NODE_ENV = 'development') { app.use(cors({ origin: `http://localhost:3000` })) }
 
-app.use('/api', authRoutes);
-app.use('/api', userRoutes);
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);

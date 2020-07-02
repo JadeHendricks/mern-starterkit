@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { withRouter, NavLink } from 'react-router-dom';
-import { isAuth, signout } from '../components/auth/helpers';
+import { isAuth, signout } from '../auth/helpers';
 
 const Navigation = ({ history }) => {
     return (
@@ -17,10 +17,10 @@ const Navigation = ({ history }) => {
                     { !isAuth() && (
                         <Fragment>
                             <li className='nav-item'>
-                                <NavLink activeClassName='active' exact to='/signup' className='nav-link text-light'>Signup</NavLink>
+                                <NavLink activeClassName='active' exact to='/signup' className='nav-link text-light'>Register</NavLink>
                             </li>
                             <li className='nav-item'>
-                                <NavLink activeClassName='active' exact to='/signin' className='nav-link text-light'>Sign in</NavLink>
+                                <NavLink activeClassName='active' exact to='/signin' className='nav-link text-light'>login</NavLink>
                             </li>
                         </Fragment>
                     )}
@@ -31,7 +31,7 @@ const Navigation = ({ history }) => {
                                 <NavLink activeClassName='active' className='nav-link' to='/admin'>{ isAuth().name }</NavLink>
                             </li>
                             <li className='nav-item'>
-                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Sign out</span>
+                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Logout</span>
                             </li>
                         </Fragment>
                     )}
@@ -42,7 +42,7 @@ const Navigation = ({ history }) => {
                                 <NavLink activeClassName='active' className='nav-link' to='/private'>{ isAuth().name }</NavLink>
                             </li>
                             <li className='nav-item'>
-                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Sign out</span>
+                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Logout</span>
                             </li>
                         </Fragment>
                     )}
@@ -51,6 +51,5 @@ const Navigation = ({ history }) => {
         </nav>
     )
 }
-
 
 export default withRouter(Navigation);

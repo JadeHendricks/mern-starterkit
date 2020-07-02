@@ -4,7 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Activate = ({ match }) => {
+const ActivateAccount = ({ match }) => {
 
     const [values, setValues] = useState({ name: '', token: '', show: true });
     const { name, token } = values;
@@ -23,7 +23,7 @@ const Activate = ({ match }) => {
         const body = JSON.stringify({ token });
 
         try {
-            const res = await axios.post('/api/account-activation', body, config);
+            const res = await axios.post('/api/auth/account-activation', body, config);
             setValues({ ...values, show: false });
             toast.success(res.data.message);
 
@@ -50,4 +50,4 @@ const Activate = ({ match }) => {
     )
 }
 
-export default Activate;
+export default ActivateAccount;

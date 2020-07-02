@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Forgot = () => {
+const ForgotPassword = () => {
     const [values, setValues] = useState({ email: '', buttonText: 'Submit' });
     const { email, buttonText } = values;
 
@@ -17,7 +17,7 @@ const Forgot = () => {
         const body = JSON.stringify({ email });
 
         try {
-            const res = await axios.put('/api/forgot-password', body, config);
+            const res = await axios.put('/api/auth/forgot-password', body, config);
 
             setValues({ ...values, buttonText: 'Submit' });
             toast.success(res.data.message);
@@ -54,4 +54,4 @@ const Forgot = () => {
     )
 }
 
-export default Forgot;
+export default ForgotPassword;

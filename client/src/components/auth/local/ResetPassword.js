@@ -4,7 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Reset = ({ match }) => {
+const ResetPassword = ({ match }) => {
     const [values, setValues] = useState({ name: '', token: '', newPassword: '', buttonText: 'Submit' });
     const { name, token, newPassword, buttonText } = values;
 
@@ -28,7 +28,7 @@ const Reset = ({ match }) => {
         const body = JSON.stringify({ newPassword, resetPasswordLink: token });
 
         try {
-            const res = await axios.put('/api/reset-password', body, config);
+            const res = await axios.put('/api/auth/reset-password', body, config);
 
             setValues({ ...values, buttonText: 'Submit' });
             toast.success(res.data.message);
@@ -65,4 +65,4 @@ const Reset = ({ match }) => {
     )
 }
 
-export default Reset;
+export default ResetPassword;

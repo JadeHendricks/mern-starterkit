@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getCookie, signout, updateUser } from './helpers';
+import { getCookie, signout, updateUser } from '../auth/helpers';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Private = ({ history }) => {
+const PrivateProfile = ({ history }) => {
     const [values, setValues] = useState({ role: '', name: '', email: '', password: '', buttonText: 'Submit' });
     const { role, name, email, password, buttonText } = values;
 
@@ -54,7 +54,7 @@ const Private = ({ history }) => {
         } catch (err) {
             console.error(err);
             setValues({ ...values, buttonText: 'Submit' });
-            // toast.error(err.response.data.message);
+            toast.error(err.response.data.message);
         }
     }
     
@@ -96,4 +96,4 @@ const Private = ({ history }) => {
     )
 }
 
-export default Private;
+export default PrivateProfile;

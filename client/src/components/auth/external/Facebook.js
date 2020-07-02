@@ -9,10 +9,9 @@ const Facebook = ({ informParent }) => {
         const body = JSON.stringify({ accessToken: response.accessToken, userID: response.userID });
 
         try {
-            const res = await axios.post('/api/facebook-login', body, config);   
+            const res = await axios.post('/api/auth/facebook-login', body, config);   
             informParent(res);
         } catch (err) {
-            console.log("error", err);
             console.error(err.response);
         } 
     }
@@ -22,9 +21,9 @@ const Facebook = ({ informParent }) => {
             <FacebookLogin
                 appId={`${process.env.REACT_APP_FACEBOOK_APP_ID}`}
                 autoLoad={ false }
-                callback={responseFacebook}
-                render={renderProps => (
-                    <button onClick={renderProps.onClick} className="btn btn-outline-primary btn-block">Login with Facebook</button>
+                callback={ responseFacebook }
+                render={ renderProps => (
+                    <button onClick={ renderProps.onClick } className="btn btn-primary btn-block">Login with Facebook</button>
                 )}
             />
         </div>

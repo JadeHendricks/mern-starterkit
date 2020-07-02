@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { authenticate, isAuth } from './helpers';
+import { authenticate, isAuth } from '../helpers';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Google from './Google';
-import Facebook from './Facebook';
+import Google from '../external/Google';
+import Facebook from '../external/Facebook';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Signup = ({ history }) => {
-    const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Signup' });
+const Register = ({ history }) => {
+    const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Register' });
     const { name, email, password, buttonText } = values;
 
     const handleOnChange = e => setValues({ ...values, [e.target.name]: e.target.value });
@@ -25,18 +25,18 @@ const Signup = ({ history }) => {
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-        setValues({ ...values, buttonText: 'Submitting...' });
+        setValues({ ...values, buttonText: 'Registering...' });
 
         const config = { headers: {'Content-Type': 'application/json'} };
         const body = JSON.stringify({ name, email, password });
 
         try {
-            const res = await axios.post('/api/signup', body, config);
-            setValues({ name: '', email: '', password: '', buttonText: 'Submitted' });
+            const res = await axios.post('/api/auth/register', body, config);
+            setValues({ name: '', email: '', password: '', buttonText: 'Register' });
             toast.success(res.data.message);
 
         } catch (err) {
-            setValues({ name: '', email: '', password: '', buttonText: 'Submit' });
+            setValues({ name: '', email: '', password: '', buttonText: 'Register' });
             toast.error(err.response.data.message);
         }
     }
@@ -46,7 +46,7 @@ const Signup = ({ history }) => {
             { isAuth() ? <Redirect to='/' /> : null }
             <div className="col-md-8 offset-md-2 col-sm-12">
                 <div className="card border-secondary mb-3">
-                    <div className="card-header">Sign up</div>
+                    <div className="card-header">Register</div>
                     <div className="card-body">
                         <div className="row">
                             <div className="col-sm-6 col-12">
@@ -86,4 +86,4 @@ const Signup = ({ history }) => {
     )
 }
 
-export default Signup;
+export default Register;
