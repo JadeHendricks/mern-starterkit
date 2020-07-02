@@ -33,12 +33,20 @@ const Activate = ({ match }) => {
     }
     
     return (
-        <Fragment>
-            <div className="col-md-6 offset-md-3 text-center">
-                <h1 className="pt-5 pb-3">Hey { name }, Ready to activate you account?</h1>
-                <button className="btn btn-outline-primary" onClick={ handleActivationClick }>Activate Account</button>
+        <section className="py-5">
+            <div className="col-md-8 offset-md-2 col-12">
+                <div className="card border-secondary mb-3">
+                    <div className="card-header">Hello <strong className="text-success">{ name }</strong>, ready to activate you account?</div>
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-12">
+                                <button className="btn btn-outline-primary" onClick={ handleActivationClick }>Activate Account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </Fragment>
+        </section>
     )
 }
 

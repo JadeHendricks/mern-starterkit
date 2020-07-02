@@ -29,20 +29,28 @@ const Forgot = () => {
     }
     
     return (
-        <Fragment>
-            <div className="col-md-6 offset-md-3">
-                <h1 className="pt-5 pb-3 text-center">Forgot password</h1>
-                <form onSubmit={ handleOnSubmit }>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="email">Email</label>
-                        <input onChange={ handleOnChange } placeholder="Youremail@example.com" name="email" value={ email } type="email" className="form-control"/>
+        <section className="py-5">
+            <div className="col-md-8 offset-md-2 col-12">
+                <div className="card border-secondary mb-3">
+                    <div className="card-header">Forgot password</div>
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-12">
+                                <form onSubmit={ handleOnSubmit }>
+                                    <div className="form-group">
+                                        <label className="text-muted" htmlFor="email">Email</label>
+                                        <input onChange={ handleOnChange } placeholder="Youremail@example.com" name="email" value={ email } type="email" className="form-control"/>
+                                    </div>
+                                    <div>
+                                        <button className="btn btn-primary" type="submit">{ buttonText }</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                    <button className="btn btn-primary" type="submit">{ buttonText }</button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </Fragment>
+        </section>
     )
 }
 

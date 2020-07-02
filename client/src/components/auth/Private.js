@@ -60,7 +60,7 @@ const Private = ({ history }) => {
     return (
         <section className="py-5">
             <div className="col-md-8 offset-md-2 col-12">
-                <div class="card border-secondary mb-3">
+                <div className="card border-secondary mb-3">
                     <div className="card-header">Private - Profile update</div>
                     <div className="card-body">
                         <div className="row">

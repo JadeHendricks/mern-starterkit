@@ -72,8 +72,8 @@ const Signin = ({ history }) => {
                                         <label className="text-muted" htmlFor="password">Password</label>
                                         <input onChange={ handleOnChange } placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
                                     </div>
-                                    <div>
-                                    <button className="btn btn-primary" type="submit">{ buttonText }</button>
+                                    <div className="form-group">
+                                        <button className="btn btn-primary" type="submit">{ buttonText }</button>
                                     </div>
                                 </form>
                                 <hr />
