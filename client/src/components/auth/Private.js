@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getCookie, signout, updateUser } from './helpers';
 import { toast } from 'react-toastify';
@@ -10,6 +10,7 @@ const Private = ({ history }) => {
 
     useEffect(() => {
         loadProfile();
+    // eslint-disable-next-line
     }, []);
 
     const loadProfile = async () => {
@@ -75,12 +76,12 @@ const Private = ({ history }) => {
                                         <input onChange={ handleOnChange } name="name" placeholder="Name" value={ name } type="text" className="form-control"/>
                                     </div>
                                     <div className="form-group">
-                                        <label className="text-muted" htmlFor="email">Email</label>
-                                        <input placeholder="Youremail@example.com" name="email" defaultValue={ email } type="email" className="form-control" disabled />
+                                        <label className="text-muted" htmlFor="email">Email address</label>
+                                        <input placeholder="you@example.com" name="email" defaultValue={ email } type="email" className="form-control" disabled />
                                     </div>
                                     <div className="form-group">
                                         <label className="text-muted" htmlFor="password">Password</label>
-                                        <input onChange={ handleOnChange } placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
+                                        <input onChange={ handleOnChange }  placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
                                     </div>
                                     <div>
                                         <button className="btn btn-primary" type="submit">{ buttonText }</button>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -38,8 +38,8 @@ const Forgot = () => {
                             <div className="col-12">
                                 <form onSubmit={ handleOnSubmit }>
                                     <div className="form-group">
-                                        <label className="text-muted" htmlFor="email">Email</label>
-                                        <input onChange={ handleOnChange } placeholder="Youremail@example.com" name="email" value={ email } type="email" className="form-control"/>
+                                        <label className="text-muted" htmlFor="email">Email address</label>
+                                        <input onChange={ handleOnChange } placeholder="you@example.com" name="email" value={ email } type="email" className="form-control"/>
                                     </div>
                                     <div>
                                         <button className="btn btn-primary" type="submit">{ buttonText }</button>

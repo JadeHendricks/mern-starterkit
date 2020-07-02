@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -50,7 +50,7 @@ const Reset = ({ match }) => {
                                 <form onSubmit={ handleOnSubmit }>
                                     <div className="form-group">
                                         <label className="text-muted" htmlFor="newPassword">New password</label>
-                                        <input onChange={ handleOnChange } placeholder="New password" name="newPassword" value={ newPassword } type="password" className="form-control" required />
+                                        <input onChange={ handleOnChange } placeholder="••••••••" name="newPassword" value={ newPassword } type="password" className="form-control" required />
                                     </div>
                                     <div>
                                         <button className="btn btn-primary" type="submit">{ buttonText }</button>

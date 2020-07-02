@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -15,8 +15,8 @@ const Activate = ({ match }) => {
             const { name } = jwt.decode(token);
             setValues({  ...values, name, token });
         }
-
-    }, [match.params.token, values]);
+    // eslint-disable-next-line
+    }, [match.params.token]);
 
     const handleActivationClick = async () => {
         const config = { headers: {'Content-Type': 'application/json'} };
