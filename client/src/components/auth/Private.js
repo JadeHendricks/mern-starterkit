@@ -58,33 +58,40 @@ const Private = ({ history }) => {
     }
     
     return (
-        <Fragment>
-            <div className="col-md-6 offset-md-3">
-                <h1 className="pt-5 pb-3 text-center">Private</h1>
-                <p className="lead text-center pb-3">Profile update</p>
-                <form onSubmit={ handleOnSubmit }>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="role">Role</label>
-                        <input name="role" placeholder="Role" defaultValue={ role } type="text" className="form-control"  disabled />
+        <section className="py-5">
+            <div className="col-md-8 offset-md-2 col-12">
+                <div class="card border-secondary mb-3">
+                    <div className="card-header">Private - Profile update</div>
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-12">
+                                <form onSubmit={ handleOnSubmit }>
+                                    <div className="form-group">
+                                        <label className="text-muted" htmlFor="role">Role</label>
+                                        <input name="role" placeholder="Role" defaultValue={ role } type="text" className="form-control"  disabled />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="text-muted" htmlFor="name">Name</label>
+                                        <input onChange={ handleOnChange } name="name" placeholder="Name" value={ name } type="text" className="form-control"/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="text-muted" htmlFor="email">Email</label>
+                                        <input placeholder="Youremail@example.com" name="email" defaultValue={ email } type="email" className="form-control" disabled />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="text-muted" htmlFor="password">Password</label>
+                                        <input onChange={ handleOnChange } placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
+                                    </div>
+                                    <div>
+                                        <button className="btn btn-primary" type="submit">{ buttonText }</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="name">Name</label>
-                        <input onChange={ handleOnChange } name="name" placeholder="Name" value={ name } type="text" className="form-control"/>
-                    </div>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="email">Email</label>
-                        <input placeholder="Youremail@example.com" name="email" defaultValue={ email } type="email" className="form-control" disabled />
-                    </div>
-                    <div className="form-group">
-                        <label className="text-muted" htmlFor="password">Password</label>
-                        <input onChange={ handleOnChange } placeholder="Password" name="password" value={ password } type="password" className="form-control"/>
-                    </div>
-                    <div>
-                        <button className="btn btn-primary" type="submit">{ buttonText }</button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </Fragment>
+        </section>
     )
 }
 
