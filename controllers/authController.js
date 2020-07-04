@@ -85,13 +85,11 @@ exports.login = async (req, res) => {
     try {
         const user = await User.findOne({ email: email });
 
-        //TODO - CHECK PASSWORD
-        //if (!user || !user.authenticate(password)) {
-        if (!user || password !== user.password) {
-            return res.status(400).json({
-                message: 'Email or Password is incorrect.'
+        if (!user || !(await user.correctPassword(password, user.password))) {
+            return res.status(401).json({
+                message: 'Incorrect email or password'
             });
-        } 
+        }
 
         const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: 3600000 });
         const { _id, name, user_email, role } = user;
