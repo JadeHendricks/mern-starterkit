@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
+const { promisify } = require('util')
 const _ = require('lodash');
 const fetch = require('node-fetch');
 const { OAuth2Client } = require('google-auth-library');
@@ -107,10 +108,32 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.requireSignin = expressJwt({
-    //validate token and makes data available in req.user
-    secret: process.env.JWT_SECRET
-});
+exports.protect = async (req, res, next) => {
+    let token;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (!token) {
+        return res.status(401).json({
+            message: 'You are not logged in! Please log in to get access.'
+        });
+    }
+
+    //verify the token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    console.log(decoded._id);
+    // check if the user still exists
+    const currentUser = await User.findById(decoded._id);
+    if (!currentUser) {
+        return res.status(401).json({
+            message: 'The user belonging to this token no longer exists'
+        });
+    }
+
+    req.user = currentUser;
+    next();
+}
 
 exports.adminOnlyRoutes = async (req, res, next) => {
     try {
