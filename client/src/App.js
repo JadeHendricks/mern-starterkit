@@ -14,26 +14,30 @@ import PrivateProfile from './components/profiles/PrivateProfile';
 import PrivateRoute from './components/routing/PrivateRoute';
 import AdminRoute from './components/routing/AdminRoute';
 
+import AuthState from "./context/authContext/AuthState";
+
 function App() {
   return (
-    <Router>
-      <Fragment>
-        <ToastContainer />
-        <Navigation />
-        <div className="container">
-          <Switch>
-            <Route path='/signup' exact component={ Register } />
-            <Route path='/signin' exact component={ Login } />
-            <Route path='/' exact component={ Base } />
-            <Route path='/forgot-password' exact component={ ForgotPassword } />
-            <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
-            <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
-            <PrivateRoute path='/private' exact component={ PrivateProfile } />
-            <AdminRoute path='/admin' exact component={ AdminProfile } />
-          </Switch>
-        </div>
-      </Fragment>
-    </Router>
+    <AuthState>
+      <Router>
+        <Fragment>
+          <ToastContainer />
+          <Navigation />
+          <div className="container">
+            <Switch>
+              <Route path='/signup' exact component={ Register } />
+              <Route path='/signin' exact component={ Login } />
+              <Route path='/' exact component={ Base } />
+              <Route path='/forgot-password' exact component={ ForgotPassword } />
+              <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
+              <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
+              <PrivateRoute path='/private' exact component={ PrivateProfile } />
+              <AdminRoute path='/admin' exact component={ AdminProfile } />
+            </Switch>
+          </div>
+        </Fragment>
+      </Router>
+    </AuthState>
   );
 }
 
