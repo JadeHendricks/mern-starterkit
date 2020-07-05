@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getCookie, signout, updateUser } from '../auth/helpers';
+import { signout, updateUser } from '../auth/helpers';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -14,11 +14,8 @@ const AdminProfile = ({ history }) => {
     }, []);
 
     const loadProfile = async () => {
-        const { token } = getCookie();
-        const config = { headers: { Authorization: `Bearer ${token}`}};
-
         try {
-            const res = await axios.get('/api/user', config); 
+            const res = await axios.get('/api/user'); 
             const { role, name, email } = res.data;
             setValues({ ...values, role, name, email});
         } catch (err) {
@@ -33,16 +30,9 @@ const AdminProfile = ({ history }) => {
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-        const { token } = getCookie();
         setValues({ ...values, buttonText: 'Updated' });
 
-        const config = { 
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            }
-        };
-
+        const config = { headers: {'Content-Type': 'application/json'}};
         const body = JSON.stringify({ name, password });
 
         try {

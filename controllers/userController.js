@@ -1,8 +1,8 @@
 const User = require('../models/UserModel');
 
-exports.readUser = async (req, res) => {
+exports.getUser = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).select('-hashed_password -salt');
+        const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(400).json({
                 message: 'User not found!'

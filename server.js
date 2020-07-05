@@ -5,6 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
@@ -31,6 +32,8 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(cookieParser());
 app.use(mongoSanitize());
 app.use(xss());
 //Add a whitelist option if you allow duplicate parameters

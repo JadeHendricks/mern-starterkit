@@ -1,9 +1,7 @@
 const User = require('../models/UserModel');
 const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
 const sendGridMail = require('@sendgrid/mail');
 const dotenv = require('dotenv');
-const { promisify } = require('util')
 const _ = require('lodash');
 const fetch = require('node-fetch');
 const { OAuth2Client } = require('google-auth-library');
@@ -45,8 +43,6 @@ exports.register = async (req, res) => {
             message: `Email has been sent to ${email}. Follow the instructions to activate your account`
         });
 
-        //const newUser = await User.create({ name, email, password })
-
     } catch (err) {
         console.error(err);
         return res.status(404).json({
@@ -84,7 +80,7 @@ exports.accountActivation = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email }).select('+password');
 
         if (!user || !(await user.correctPassword(password, user.password))) {
             return res.status(401).json({
@@ -93,11 +89,19 @@ exports.login = async (req, res) => {
         }
 
         const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: 3600000 });
-        const { _id, name, user_email, role } = user;
+
+        const cookieOptions = {
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+            httpOnly: true
+        }
+        if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+        res.cookie('token2', token, cookieOptions);
+
+        user.password = undefined;
 
         res.status(200).json({
             token,
-            user: { _id, name, user_email, role }
+            user
         });
 
     } catch (err) {
@@ -110,8 +114,11 @@ exports.login = async (req, res) => {
 
 exports.protect = async (req, res, next) => {
     let token;
+    //first part is for the API
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt;
     }
 
     if (!token) {
@@ -121,8 +128,7 @@ exports.protect = async (req, res, next) => {
     }
 
     //verify the token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log(decoded._id);
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
     // check if the user still exists
     const currentUser = await User.findById(decoded._id);
     if (!currentUser) {
@@ -135,31 +141,17 @@ exports.protect = async (req, res, next) => {
     next();
 }
 
-exports.adminOnlyRoutes = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.user._id);
-        if (!user) {
-            return res.status(400).json({
-                message: 'User not found'
-            });
-        }
-    
-        if (user.role !== 'admin') {
-            return res.status(400).json({
-                message: 'Admin resource. Access denied.'
-            });
-        }
-    
-        req.profile = user;
-        next();
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({
-            message: 'Server Error'
-        })
-    }
-
-}
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+      if (!roles.includes(req.user.role)) {
+          return res.status(403).json({
+              message: 'You do not have permission to perform this action'
+          });
+      }
+  
+      next();
+    };
+  };
 
 exports.forgotPassword = async (req, res) => {
     try {

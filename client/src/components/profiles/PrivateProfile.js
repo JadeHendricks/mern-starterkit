@@ -14,11 +14,8 @@ const PrivateProfile = ({ history }) => {
     }, []);
 
     const loadProfile = async () => {
-        const { token } = getCookie();
-        const config = { headers: { Authorization: `Bearer ${token}`}};
-
         try {
-            const res = await axios.get('/api/user', config); 
+            const res = await axios.get('/api/user'); 
             const { role, name, email } = res.data;
             setValues({ ...values, role, name, email});
         } catch (err) {

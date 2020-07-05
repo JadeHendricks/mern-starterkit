@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { readUser, updateUser } = require('../controllers/userController');
-const { protect, adminOnlyRoutes } = require('../controllers/authController');
+const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 
 router
     .route('/')
-    .get(protect, readUser)
-    .put(protect, updateUser);
+    .get(authController.protect, userController.getUser)
+    .put(authController.protect, userController.updateUser);
 
 //admin only example
 //router.put('/admin', requireSignin, adminOnlyRoutes, updateUser);

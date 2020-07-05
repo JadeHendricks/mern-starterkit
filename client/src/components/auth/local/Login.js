@@ -15,7 +15,7 @@ const Login = ({ history }) => {
 
     const informParent = reponse => {
         authenticate(reponse, () => {
-            toast.success(`Hey ${reponse.data.user.name}, welcome to the authentication boilerplate`);
+            toast.success('Welcome to the authentication boilerplate');
             setTimeout(() => {
                 isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
             }, 5500);
@@ -31,15 +31,7 @@ const Login = ({ history }) => {
 
         try {
             const res = await axios.post('/api/auth/login', body, config);
-
-            authenticate(res, () => {
-                setValues({ email: '', password: '', buttonText: 'Logging in...' });
-                toast.success(`Hey ${res.data.user.name}, welcome to the authentication boilerplate`);
-                setTimeout(() => {
-                    isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
-                }, 5500);
-
-            });
+            informParent(res);
 
         } catch (err) {
             setValues({ email: '', password: '', buttonText: 'Login' });
