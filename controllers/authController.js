@@ -91,11 +91,11 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: 3600000 });
 
         const cookieOptions = {
-            expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN),
             httpOnly: true
         }
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-        res.cookie('token2', token, cookieOptions);
+        res.cookie('auth-token', token, cookieOptions);
 
         user.password = undefined;
 
@@ -117,8 +117,8 @@ exports.protect = async (req, res, next) => {
     //first part is for the API
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.jwt) {
-        token = req.cookies.jwt;
+    } else if (req.cookies.auth-token) {
+        token = req.cookies.auth-token;
     }
 
     if (!token) {
@@ -151,7 +151,7 @@ exports.restrictTo = (...roles) => {
   
       next();
     };
-  };
+};
 
 exports.forgotPassword = async (req, res) => {
     try {
