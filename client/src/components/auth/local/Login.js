@@ -1,42 +1,22 @@
-import React, { useState } from 'react';
-import { authenticate, isAuth } from '../helpers';
+import React, { useState, useContext } from 'react';
+import AuthContext from '../../../context/authContext/AuthContext';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import Google from '../external/Google';
 import Facebook from '../external/Facebook';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 
-const Login = ({ history }) => {
+const Login = () => {
+
+    const { login }  = useContext(AuthContext);
+
     const [values, setValues] = useState({ email: '', password: '', buttonText: 'Login' });
     const { email, password, buttonText } = values;
 
     const handleOnChange = e => setValues({ ...values, [e.target.name]: e.target.value });
 
-    const informParent = reponse => {
-        authenticate(reponse, () => {
-            toast.success('Welcome to the authentication boilerplate');
-            setTimeout(() => {
-                isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
-            }, 5500);
-        });
-    }
-
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         setValues({ ...values, buttonText: 'Logging in...' });
-
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ email, password });
-
-        try {
-            const res = await axios.post('/api/auth/login', body, config);
-            informParent(res);
-
-        } catch (err) {
-            setValues({ email: '', password: '', buttonText: 'Login' });
-            toast.error(err.response.data.message);
-        }
+        login(email, password);
     }
     
     return (
@@ -47,10 +27,10 @@ const Login = ({ history }) => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-sm-6 col-12">
-                                <Google informParent={ informParent }/>
+                                <Google />
                             </div>
                             <div className="col-sm-6 col-12">
-                                <Facebook informParent={ informParent } />
+                                <Facebook />
                             </div>
                         </div>
                         <div className="row">

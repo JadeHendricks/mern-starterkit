@@ -9,10 +9,8 @@ import ForgotPassword from './components/auth/local/ForgotPassword';
 import ResetPassword from './components/auth/local/ResetPassword';
 import Base from './components/layouts/Base';
 import Navigation from './components/layouts/Navigation';
-import AdminProfile from './components/profiles/AdminProfile';
-import PrivateProfile from './components/profiles/PrivateProfile';
+import Dashboard from './components/layouts/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
-import AdminRoute from './components/routing/AdminRoute';
 
 import AuthState from "./context/authContext/AuthState";
 
@@ -25,14 +23,13 @@ function App() {
           <Navigation />
           <div className="container">
             <Switch>
+              <Route path='/' exact component={ Base } />
               <Route path='/signup' exact component={ Register } />
               <Route path='/signin' exact component={ Login } />
-              <Route path='/' exact component={ Base } />
               <Route path='/forgot-password' exact component={ ForgotPassword } />
               <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
               <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
-              <PrivateRoute path='/private' exact component={ PrivateProfile } />
-              <AdminRoute path='/admin' exact component={ AdminProfile } />
+              <PrivateRoute path='/dashboard' exact component={ Dashboard } />
             </Switch>
           </div>
         </Fragment>

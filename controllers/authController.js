@@ -91,11 +91,11 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: 3600000 });
 
         const cookieOptions = {
-            expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN),
+            expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             httpOnly: true
         }
         if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-        res.cookie('auth-token', token, cookieOptions);
+        res.cookie('authtoken', token, cookieOptions);
 
         user.password = undefined;
 
@@ -112,13 +112,24 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.logout = (req, res) => {
+    res.cookie('authtoken', 'loggedout', {
+        expires: new Date(Date.now() + 5 * 1000),
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        message: 'success'
+    });
+}
+
 exports.protect = async (req, res, next) => {
     let token;
     //first part is for the API
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.auth-token) {
-        token = req.cookies.auth-token;
+    } else if (req.cookies.authtoken) {
+        token = req.cookies.authtoken;
     }
 
     if (!token) {

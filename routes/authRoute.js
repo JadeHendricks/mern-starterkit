@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, accountActivation, forgotPassword, resetPassword, googleLogin, facebookLogin } = require('../controllers/authController');
+const { register, logout, login, accountActivation, forgotPassword, resetPassword, googleLogin, facebookLogin } = require('../controllers/authController');
 const { runValidation } = require('../validators/index');
 const { 
     userRegisterValidator, 
@@ -16,5 +16,7 @@ router.post('/facebook-login', facebookLogin);
 
 router.put('/forgot-password', forgotPasswordValidator, runValidation, forgotPassword);
 router.put('/reset-password', resetPasswordValidator, runValidation, resetPassword);
+
+router.get('/logout', logout);
 
 module.exports = router;

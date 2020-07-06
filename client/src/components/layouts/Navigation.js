@@ -1,8 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
+import AuthContext from '../../context/authContext/AuthContext';
 import { withRouter, NavLink } from 'react-router-dom';
-import { isAuth, signout } from '../auth/helpers';
 
-const Navigation = ({ history }) => {
+const Navigation = () => {
+
+    const { isAuthenticated, logout, user } = useContext(AuthContext);
+
+    const onLogout = () => logout();
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <NavLink activeClassName='active' exact to='/' className="navbar-brand text-light">Mern Authentication</NavLink>
@@ -14,7 +19,7 @@ const Navigation = ({ history }) => {
                     <li className='nav-item'> 
                         <NavLink activeClassName='active' exact to='/' className='nav-link text-light'>Home</NavLink>
                     </li>
-                    { !isAuth() && (
+                    { !isAuthenticated && (
                         <Fragment>
                             <li className='nav-item'>
                                 <NavLink activeClassName='active' exact to='/signup' className='nav-link text-light'>Register</NavLink>
@@ -25,24 +30,13 @@ const Navigation = ({ history }) => {
                         </Fragment>
                     )}
 
-                    { isAuth() && isAuth().role === 'admin' && (
+                    { isAuthenticated && (
                         <Fragment>
                             <li className='nav-item'>
-                                <NavLink activeClassName='active' className='nav-link' to='/admin'>{ isAuth().name }</NavLink>
+                                <NavLink activeClassName='active' className='nav-link' to='/dashboard'>Dashboard</NavLink>
                             </li>
                             <li className='nav-item'>
-                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Logout</span>
-                            </li>
-                        </Fragment>
-                    )}
-
-                    { isAuth() && isAuth().role === 'subscriber' && (
-                        <Fragment>
-                            <li className='nav-item'>
-                                <NavLink activeClassName='active' className='nav-link' to='/private'>{ isAuth().name }</NavLink>
-                            </li>
-                            <li className='nav-item'>
-                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ (e) => signout(() => { e.preventDefault(); history.push('/'); }) }>Logout</span>
+                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ onLogout }>Logout</span>
                             </li>
                         </Fragment>
                     )}
