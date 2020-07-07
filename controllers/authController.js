@@ -112,6 +112,28 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.isLoggedIn = async (req, res, next) => {
+    if (req.cookies.authtoken) {
+      try {
+        // 1) verify token
+        const decoded = await jwt.verify(req.cookies.authtoken, process.env.JWT_SECRET);
+        // 2) Check if user still exists
+        const currentUser = await User.findById(decoded._id);
+        if (!currentUser) {
+          return next();
+        }
+        res.status(200).json({
+            message: 'success'
+        });
+        return next();
+      } catch (err) {
+        return next();
+      }
+    } else {
+        console.log('No token found')
+    }
+}
+
 exports.logout = (req, res) => {
     res.cookie('authtoken', 'loggedout', {
         expires: new Date(Date.now() + 5 * 1000),
