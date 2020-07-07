@@ -129,8 +129,6 @@ exports.isLoggedIn = async (req, res, next) => {
       } catch (err) {
         return next();
       }
-    } else {
-        console.log('No token found')
     }
 }
 
