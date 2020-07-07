@@ -1,10 +1,16 @@
-import React, {useReducer} from "react";
+import React, { useReducer, useEffect } from "react";
 import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
 import axios from 'axios';
-import { LOGIN_SUCCESS, LOGIN_ERROR, AUTH_ERROR, LOGOUT  } from '../types';
+import { LOGIN_SUCCESS, LOGIN_ERROR, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
 
 const AuthState = props => {
+
+  useEffect(() => {
+    if (!state.isAuthenticated && !state.user) {
+      isLoggedin();
+    }
+  }, []);
 
   const initialState = {
     isAuthenticated: false,
@@ -12,13 +18,37 @@ const AuthState = props => {
     user: null
   };
 
+  const isLoggedin = async () => {
+    try {
+      const res = await axios.get('/api/auth/isloggedin');
+      if (res.status === 200) {
+        loadUser();
+      } else {
+        return;
+      }
+    } catch (err) { 
+      dispatch({ type: AUTH_ERROR });
+    }
+  }
+
+  const loadUser = async () => {
+    try {
+      const res = await axios.get('/api/user');
+      dispatch({ type: USER_LOADED, payload: res.data });
+    } catch (err) {
+      dispatch({ type: AUTH_ERROR });
+    }
+  }
+
+
   const login = async (email, password) => {
     const config = { headers: {'Content-Type': 'application/json'} };
     const body = JSON.stringify({ email, password });
 
     try {
         const res = await axios.post('/api/auth/login', body, config);
-        dispatch({ type: LOGIN_SUCCESS, payload: res.data.user });
+        dispatch({ type: LOGIN_SUCCESS });
+        loadUser();
     } catch (err) {
       dispatch({ type: LOGIN_ERROR });
     }
@@ -44,9 +74,10 @@ const AuthState = props => {
       loading: state.loading,
       user: state.loading,
       login,
-      logout
+      logout,
+      loadUser
     }}>
-      {props.children}
+      { props.children }
     </AuthContext.Provider>
   )
 }

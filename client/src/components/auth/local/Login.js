@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import AuthContext from '../../../context/authContext/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Google from '../external/Google';
 import Facebook from '../external/Facebook';
 
 const Login = () => {
 
-    const { login }  = useContext(AuthContext);
+    const { login, isAuthenticated }  = useContext(AuthContext);
 
     const [values, setValues] = useState({ email: '', password: '', buttonText: 'Login' });
     const { email, password, buttonText } = values;
@@ -17,6 +17,10 @@ const Login = () => {
         e.preventDefault();
         setValues({ ...values, buttonText: 'Logging in...' });
         login(email, password);
+    }
+
+    if (isAuthenticated) {
+        return <Redirect to='/dashboard' />;
     }
     
     return (

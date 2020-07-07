@@ -43,7 +43,6 @@ const Register = ({ history }) => {
     
     return (
         <section className="py-5">
-            { isAuth() ? <Redirect to='/' /> : null }
             <div className="col-md-8 offset-md-2 col-sm-12">
                 <div className="card border-secondary mb-3">
                     <div className="card-header">Register</div>

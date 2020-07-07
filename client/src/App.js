@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useContext } from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import axios from 'axios';
 import './App.css';
 import Register from './components/auth/local/Register';
 import Login from './components/auth/local/Login';
@@ -16,21 +15,6 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import AuthState from "./context/authContext/AuthState";
 
 function App() {
-
-  useEffect(() => {
-    isLoggedin();
-
-  }, []);
-
-  const isLoggedin = async () => {
-    try {
-      const res = await axios.get('/api/auth/isloggedin');
-      //TODO
-    } catch (err) { 
-      console.log('User is not logged in 2');
-    }
-  }
-
   return (
     <AuthState>
       <Router>
