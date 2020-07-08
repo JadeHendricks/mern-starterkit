@@ -7,9 +7,7 @@ import { LOGIN_SUCCESS, LOGIN_ERROR, USER_LOADED, AUTH_ERROR, LOGOUT  } from '..
 const AuthState = props => {
 
   useEffect(() => {
-    if (!state.isAuthenticated && !state.user) {
-      isLoggedin();
-    }
+    isLoggedin();
   }, []);
 
   const initialState = {
@@ -23,10 +21,14 @@ const AuthState = props => {
       const res = await axios.get('/api/auth/isloggedin');
       if (res.status === 200) {
         loadUser();
-      } else {
-        return;
       }
+      setTimeout(() => {
+        document.querySelector('.loader-container').remove();
+      }, 1500);
     } catch (err) { 
+      setTimeout(() => {
+        document.querySelector('.loader-container').remove();
+      }, 1500);
       dispatch({ type: AUTH_ERROR });
     }
   }

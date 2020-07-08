@@ -130,6 +130,7 @@ exports.isLoggedIn = async (req, res, next) => {
         return next();
       }
     }
+    return next();
 }
 
 exports.logout = (req, res) => {

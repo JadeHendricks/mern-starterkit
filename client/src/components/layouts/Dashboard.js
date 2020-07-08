@@ -3,10 +3,6 @@ import AuthContext from '../../context/authContext/AuthContext';
 
 const Dashboard = () => {
     const authContext = useContext(AuthContext);
-
-    useEffect(() => {
-        authContext.loadUser();
-    }, []);
     return (
         <section className="py-5">
             <div className="col-md-10 offset-md-1 col-sm-12">
