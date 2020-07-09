@@ -10,7 +10,9 @@ import ResetPassword from './components/auth/local/ResetPassword';
 import Base from './components/layouts/Base';
 import Navigation from './components/layouts/Navigation';
 import Dashboard from './components/layouts/Dashboard';
+import Loader from './components/layouts/Loader';
 import PrivateRoute from './components/routing/PrivateRoute';
+import Random from './components/layouts/Random';
 
 import AuthState from "./context/authContext/AuthState";
 
@@ -19,6 +21,7 @@ function App() {
     <AuthState>
       <Router>
         <Fragment>
+          <Loader />
           <ToastContainer />
           <Navigation />
           <div className="container">
@@ -30,6 +33,7 @@ function App() {
               <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
               <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
               <PrivateRoute path='/dashboard' exact component={ Dashboard } />
+              <PrivateRoute path='/random' exact component={ Random } />
             </Switch>
           </div>
         </Fragment>

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import AuthContext from '../../context/authContext/AuthContext';
+import Loader from '../layouts/Loader';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -7,7 +8,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
   return (
     <Route {...rest} render={props => !isAuthenticated ? (
-      <Redirect to='/signin' />
+      <Loader />
     ) : (
       <Component {...props} />
     )} />

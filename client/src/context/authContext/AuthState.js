@@ -11,7 +11,7 @@ const AuthState = props => {
   }, []);
 
   const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: null,
     loading: true,
     user: null
   };
@@ -20,15 +20,12 @@ const AuthState = props => {
     try {
       const res = await axios.get('/api/auth/isloggedin');
       if (res.status === 200) {
+        state.isAuthenticated = true;
         loadUser();
+      } else {
+        state.isAuthenticated = false
       }
-      setTimeout(() => {
-        document.querySelector('.loader-container').remove();
-      }, 1500);
     } catch (err) { 
-      setTimeout(() => {
-        document.querySelector('.loader-container').remove();
-      }, 1500);
       dispatch({ type: AUTH_ERROR });
     }
   }

@@ -19,6 +19,7 @@ const Navigation = () => {
                     <li className='nav-item'> 
                         <NavLink activeClassName='active' exact to='/' className='nav-link text-light'>Home</NavLink>
                     </li>
+
                     { !isAuthenticated && (
                         <Fragment>
                             <li className='nav-item'>
@@ -36,10 +37,14 @@ const Navigation = () => {
                                 <NavLink activeClassName='active' className='nav-link' to='/dashboard'>Dashboard</NavLink>
                             </li>
                             <li className='nav-item'>
-                                <span className='nav-link' style={{ cursor: 'pointer', color: '#fff' }} onClick={ onLogout }>Logout</span>
+                                <NavLink activeClassName='active' className='nav-link' to='/random'>Random</NavLink>
+                            </li>
+                            <li className='nav-item'>
+                                <NavLink className='nav-link' to='/' style={{ cursor: 'pointer', color: '#fff' }} onClick={ onLogout }>Logout</NavLink>
                             </li>
                         </Fragment>
                     )}
+
                 </ul>
             </div>
         </nav>
