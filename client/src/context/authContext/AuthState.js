@@ -20,10 +20,7 @@ const AuthState = props => {
     try {
       const res = await axios.get('/api/auth/isloggedin');
       if (res.status === 200) {
-        state.isAuthenticated = true;
         loadUser();
-      } else {
-        state.isAuthenticated = false
       }
     } catch (err) { 
       dispatch({ type: AUTH_ERROR });
