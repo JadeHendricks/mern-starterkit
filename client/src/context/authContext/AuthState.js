@@ -24,8 +24,14 @@ const AuthState = props => {
         loadUser();
       }
     } catch (err) { 
-      props.history.push('/signin');
-      dispatch({ type: AUTH_ERROR });
+      //could be made better //TODO
+      if (window.location.href === 'http://localhost:3000/' || window.location.href === 'http://localhost:3000/signup') {
+        dispatch({ type: AUTH_ERROR });
+        return;
+      } else {
+        props.history.push('/signin');
+        dispatch({ type: AUTH_ERROR });
+      }
     }
   }
 

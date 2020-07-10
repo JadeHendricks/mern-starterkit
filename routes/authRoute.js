@@ -17,7 +17,6 @@ router.post('/facebook-login', facebookLogin);
 router.put('/forgot-password', forgotPasswordValidator, runValidation, forgotPassword);
 router.put('/reset-password', resetPasswordValidator, runValidation, resetPassword);
 
-router.get('/logout', logout);
 router.get('/isloggedin', isLoggedIn);
 router.get('/logout', logout);
 
