@@ -18,27 +18,29 @@ import AuthState from "./context/authContext/AuthState";
 
 function App() {
   return (
-    <AuthState>
-      <Router>
-        <Fragment>
-          <Loader />
-          <ToastContainer />
-          <Navigation />
-          <div className="container">
-            <Switch>
-              <Route path='/' exact component={ Base } />
-              <Route path='/signup' exact component={ Register } />
-              <Route path='/signin' exact component={ Login } />
-              <Route path='/forgot-password' exact component={ ForgotPassword } />
-              <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
-              <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
-              <PrivateRoute path='/dashboard' exact component={ Dashboard } />
-              <PrivateRoute path='/random' exact component={ Random } />
-            </Switch>
-          </div>
-        </Fragment>
-      </Router>
-    </AuthState>
+
+    <Router>
+      <AuthState>
+      <Fragment>
+        <Loader />
+        <ToastContainer />
+        <Navigation />
+        <div className="container">
+          <Switch>
+            <Route path='/' exact component={ Base } />
+            <Route path='/signup' exact component={ Register } />
+            <Route path='/signin' exact component={ Login } />
+            <Route path='/forgot-password' exact component={ ForgotPassword } />
+            <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
+            <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
+            <PrivateRoute path='/dashboard' exact component={ Dashboard } />
+            <PrivateRoute path='/random' exact component={ Random } />
+          </Switch>
+        </div>
+      </Fragment>
+      </AuthState>
+    </Router>
+
   );
 }
 

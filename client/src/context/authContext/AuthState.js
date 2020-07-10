@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { LOGIN_SUCCESS, LOGIN_ERROR, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
 
@@ -23,6 +24,7 @@ const AuthState = props => {
         loadUser();
       }
     } catch (err) { 
+      props.history.push('/signin');
       dispatch({ type: AUTH_ERROR });
     }
   }
@@ -78,4 +80,4 @@ const AuthState = props => {
   )
 }
 
-export default AuthState;
+export default withRouter(AuthState);
