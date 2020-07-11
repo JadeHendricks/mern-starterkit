@@ -1,8 +1,6 @@
-import React, { useContext, useEffect } from 'react';
-import AuthContext from '../../context/authContext/AuthContext';
+import React from 'react';
 
 const Dashboard = () => {
-    const authContext = useContext(AuthContext);
     return (
         <section className="py-5">
             <div className="col-md-10 offset-md-1 col-sm-12">

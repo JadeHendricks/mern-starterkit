@@ -10,6 +10,7 @@ const AuthState = props => {
 
   useEffect(() => {
     isLoggedin();
+  // eslint-disable-next-line
   }, []);
 
   const initialState = {
@@ -58,7 +59,7 @@ const AuthState = props => {
     const body = JSON.stringify({ email, password });
 
     try {
-        const res = await axios.post('/api/auth/login', body, config);
+        await axios.post('/api/auth/login', body, config);
         dispatch({ type: LOGIN_SUCCESS });
         loadUser();
     } catch (err) {

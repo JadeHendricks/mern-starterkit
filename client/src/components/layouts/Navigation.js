@@ -4,7 +4,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 
 const Navigation = () => {
 
-    const { isAuthenticated, logout, user } = useContext(AuthContext);
+    const { isAuthenticated, logout } = useContext(AuthContext);
 
     const onLogout = () => logout();
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { authenticate, isAuth } from '../helpers';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Google from '../external/Google';
@@ -8,20 +7,11 @@ import Facebook from '../external/Facebook';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Register = ({ history }) => {
+const Register = () => {
     const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Register' });
     const { name, email, password, buttonText } = values;
 
     const handleOnChange = e => setValues({ ...values, [e.target.name]: e.target.value });
-
-    const informParent = reponse => {
-        authenticate(reponse, () => {
-            toast.success(`Hey ${reponse.data.user.name}, welcome to the authentication boilerplate`);
-            setTimeout(() => {
-                isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private');
-            }, 5500);
-        });
-    }
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
@@ -49,10 +39,10 @@ const Register = ({ history }) => {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-sm-6 col-12">
-                                <Google informParent={ informParent }/>
+                                <Google />
                             </div>
                             <div className="col-sm-6 col-12">
-                                <Facebook informParent={ informParent } />
+                                <Facebook />
                             </div>
                         </div>
                         <div className="row">
