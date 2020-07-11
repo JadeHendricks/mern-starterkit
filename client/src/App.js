@@ -16,7 +16,7 @@ import Random from './components/layouts/Random';
 
 import AuthState from "./context/authContext/AuthState";
 
-function App() {
+function App(props) {
   return (
     <Router>
       <AuthState>
@@ -31,7 +31,7 @@ function App() {
             <Route path='/signin' exact component={ Login } />
             <Route path='/forgot-password' exact component={ ForgotPassword } />
             <Route path='/auth/password/reset/:token' exact component={ ResetPassword } />
-            <Route path='/auth/activate/:token' exact component={ ActivateAccount } />
+            <Route path='/auth/activate/:token' history={props.history} exact component={ ActivateAccount } />
             <PrivateRoute path='/dashboard' exact component={ Dashboard } />
             <PrivateRoute path='/random' exact component={ Random } />
           </Switch>

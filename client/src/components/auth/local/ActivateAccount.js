@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 
@@ -23,7 +22,7 @@ const ActivateAccount = ({ match, history }) => {
         try {
             const res = await axios.post('/api/auth/account-activation', body, config);
             setValues({ ...values, show: false });
-            if (res.status === 200) {
+            if (res.status === 201) {
                 history.push('/signin');
             }
         } catch (err) {
@@ -49,4 +48,4 @@ const ActivateAccount = ({ match, history }) => {
     )
 }
 
-export default withRouter(ActivateAccount);
+export default ActivateAccount;
