@@ -18,7 +18,6 @@ import AuthState from "./context/authContext/AuthState";
 
 function App() {
   return (
-
     <Router>
       <AuthState>
       <Fragment>

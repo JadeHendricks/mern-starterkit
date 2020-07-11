@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 
-const ActivateAccount = ({ match }) => {
-
+const ActivateAccount = ({ match, history }) => {
     const [values, setValues] = useState({ name: '', token: '', show: true });
     const { name, token } = values;
 
@@ -25,10 +23,11 @@ const ActivateAccount = ({ match }) => {
         try {
             const res = await axios.post('/api/auth/account-activation', body, config);
             setValues({ ...values, show: false });
-            toast.success(res.data.message);
-
+            if (res.status === 200) {
+                history.push('/signin');
+            }
         } catch (err) {
-            toast.error(err.response.data.message);
+            console.error(err.message);
         }
     }
     
@@ -50,4 +49,4 @@ const ActivateAccount = ({ match }) => {
     )
 }
 
-export default ActivateAccount;
+export default withRouter(ActivateAccount);

@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_ERROR, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
+import { LOGIN_SUCCESS, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
   
 export default ( state, action ) => {
     switch (action.type) {
@@ -15,7 +15,6 @@ export default ( state, action ) => {
                 isAuthenticated: true,
                 loading: false
             };
-        case LOGIN_ERROR:
         case AUTH_ERROR:
         case LOGOUT:
             return {

@@ -4,7 +4,7 @@ import AuthReducer from './AuthReducer';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import cookie from 'js-cookie';
-import { LOGIN_SUCCESS, LOGIN_ERROR, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
+import { LOGIN_SUCCESS, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
 
 const AuthState = props => {
 
@@ -27,7 +27,7 @@ const AuthState = props => {
       }
     } catch (err) { 
       //could be made better //TODO
-      if (window.location.href === 'http://localhost:3000/' || window.location.href === 'http://localhost:3000/signup') {
+      if (window.location.href === 'http://localhost:3000/' || window.location.href === 'http://localhost:3000/signup' || window.location.href.startsWith('http://localhost:3000/auth/')) {
         dispatch({ type: AUTH_ERROR });
         return;
       } else {
@@ -63,7 +63,18 @@ const AuthState = props => {
         dispatch({ type: LOGIN_SUCCESS });
         loadUser();
     } catch (err) {
-      dispatch({ type: LOGIN_ERROR });
+      dispatch({ type: AUTH_ERROR });
+    }
+  }
+
+  const register = async (name, email, password) => {
+    const config = { headers: {'Content-Type': 'application/json'} };
+    const body = JSON.stringify({ name, email, password });
+
+    try {
+        await axios.post('/api/auth/register', body, config);
+    } catch (err) {
+      dispatch({ type: AUTH_ERROR });
     }
   }
 
@@ -87,6 +98,7 @@ const AuthState = props => {
       loading: state.loading,
       user: state.loading,
       externalAuthentication,
+      register,
       login,
       logout,
       loadUser

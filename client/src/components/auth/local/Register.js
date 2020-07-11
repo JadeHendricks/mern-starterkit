@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import AuthContext from '../../../context/authContext/AuthContext';
 import Google from '../external/Google';
 import Facebook from '../external/Facebook';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 
 const Register = () => {
+
+    const { register } = useContext(AuthContext);
+
     const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Register' });
     const { name, email, password, buttonText } = values;
 
@@ -16,21 +17,9 @@ const Register = () => {
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         setValues({ ...values, buttonText: 'Registering...' });
-
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ name, email, password });
-
-        try {
-            const res = await axios.post('/api/auth/register', body, config);
-            setValues({ name: '', email: '', password: '', buttonText: 'Register' });
-            toast.success(res.data.message);
-
-        } catch (err) {
-            setValues({ name: '', email: '', password: '', buttonText: 'Register' });
-            toast.error(err.response.data.message);
-        }
+        register(name, email, password);
     }
-    
+
     return (
         <section className="py-5">
             <div className="col-md-8 offset-md-2 col-sm-12">
