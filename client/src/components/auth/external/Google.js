@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
+import AuthContext from '../../../context/authContext/AuthContext';
 
-const Google = ({ informParent }) => {
+const Google = () => {
+
+    const { externalAuthentication } = useContext(AuthContext);
 
     const responseGoogle = async (response) => {
         const config = { headers: {'Content-Type': 'application/json'} };
@@ -10,7 +13,7 @@ const Google = ({ informParent }) => {
 
         try {
             const res = await axios.post('/api/auth/google-login', body, config);   
-            informParent(res);
+            externalAuthentication(res);
         } catch (err) {
             console.error(err.response);
         } 

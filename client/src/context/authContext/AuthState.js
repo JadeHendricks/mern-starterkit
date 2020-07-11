@@ -3,6 +3,7 @@ import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import cookie from 'js-cookie';
 import { LOGIN_SUCCESS, LOGIN_ERROR, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
 
 const AuthState = props => {
@@ -33,6 +34,13 @@ const AuthState = props => {
         dispatch({ type: AUTH_ERROR });
       }
     }
+  }
+
+  const externalAuthentication = (response) => {
+    cookie.set('authtoken', response.data.token, {
+      expires: process.env.REACT_APP_COOKIE_EXPIRES_IN
+    });
+    isLoggedin();
   }
 
   const loadUser = async () => {
@@ -77,6 +85,7 @@ const AuthState = props => {
       isAuthenticated: state.isAuthenticated,
       loading: state.loading,
       user: state.loading,
+      externalAuthentication,
       login,
       logout,
       loadUser

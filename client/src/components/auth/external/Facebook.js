@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import axios from 'axios';
+import AuthContext from '../../../context/authContext/AuthContext';
 
-const Facebook = ({ informParent }) => {
+const Facebook = () => {
+
+    const { externalAuthentication } = useContext(AuthContext);
 
     const responseFacebook = async (response) => {
         const config = { headers: {'Content-Type': 'application/json'} };
         const body = JSON.stringify({ accessToken: response.accessToken, userID: response.userID });
 
         try {
-            const res = await axios.post('/api/auth/facebook-login', body, config);   
-            informParent(res);
+            const res = await axios.post('/api/auth/facebook-login', body, config);
+            externalAuthentication(res)  
         } catch (err) {
             console.error(err.response);
         } 
