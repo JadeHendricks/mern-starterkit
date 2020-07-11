@@ -4,7 +4,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 
 const Navigation = () => {
 
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, user, logout } = useContext(AuthContext);
 
     const onLogout = () => logout();
 
@@ -34,10 +34,10 @@ const Navigation = () => {
                     { isAuthenticated && (
                         <Fragment>
                             <li className='nav-item'>
-                                <NavLink activeClassName='active' className='nav-link' to='/dashboard'>Dashboard</NavLink>
+                                <NavLink activeClassName='active' className='nav-link' to='/random'>Random</NavLink>
                             </li>
                             <li className='nav-item'>
-                                <NavLink activeClassName='active' className='nav-link' to='/random'>Random</NavLink>
+                                <NavLink activeClassName='active' className='nav-link' to='/dashboard'>{ user && user.name }</NavLink>
                             </li>
                             <li className='nav-item'>
                                 <NavLink className='nav-link' to='/' style={{ cursor: 'pointer', color: '#fff' }} onClick={ onLogout }>Logout</NavLink>

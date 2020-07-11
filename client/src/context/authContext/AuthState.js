@@ -53,7 +53,6 @@ const AuthState = props => {
     }
   }
 
-
   const login = async (email, password) => {
     const config = { headers: {'Content-Type': 'application/json'} };
     const body = JSON.stringify({ email, password });
@@ -96,7 +95,7 @@ const AuthState = props => {
     <AuthContext.Provider value={{
       isAuthenticated: state.isAuthenticated,
       loading: state.loading,
-      user: state.loading,
+      user: state.user,
       externalAuthentication,
       register,
       login,

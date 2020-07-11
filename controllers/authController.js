@@ -112,7 +112,7 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.isLoggedIn = async (req, res, next) => {
+exports.isLoggedIn = async (req, res) => {
     if (req.cookies.authtoken) {
       try {
         // 1) verify token
@@ -120,17 +120,23 @@ exports.isLoggedIn = async (req, res, next) => {
         // 2) Check if user still exists
         const currentUser = await User.findById(decoded._id);
         if (!currentUser) {
-          return next();
+            return res.status(401).json({
+                message: 'Token is no longer valid, please log in again.'
+            });
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: 'success'
         });
-        return next();
       } catch (err) {
-        return next();
+        return res.status(401).json({
+            message: 'Token is no longer valid, please log in again.'
+        });
       }
     }
-    return next();
+
+    return res.status(401).json({
+        message: 'You are not logged in, please login to view this page.'
+    });
 }
 
 exports.logout = (req, res) => {

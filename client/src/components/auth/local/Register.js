@@ -7,7 +7,7 @@ import Facebook from '../external/Facebook';
 
 const Register = () => {
 
-    const { register } = useContext(AuthContext);
+    const { register, isAuthenticated } = useContext(AuthContext);
 
     const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Register' });
     const { name, email, password, buttonText } = values;
@@ -18,8 +18,13 @@ const Register = () => {
         e.preventDefault();
         setValues({ ...values, buttonText: 'Registering...' });
         register(name, email, password);
+        setValues({ ...values, name: '', email: '', password: '', buttonText: 'Register' });
     }
 
+    if (isAuthenticated) {
+        return <Redirect to='/dashboard' />;
+    }
+    
     return (
         <section className="py-5">
             <div className="col-md-8 offset-md-2 col-sm-12">
