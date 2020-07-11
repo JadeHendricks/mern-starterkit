@@ -89,6 +89,31 @@ const AuthState = props => {
     }
   }
 
+  const forgotPassword = async (email) => {
+    const config = { headers: {'Content-Type': 'application/json'} };
+    const body = JSON.stringify({ email });
+
+    try {
+        await axios.put('/api/auth/forgot-password', body, config);
+    } catch (err) {
+        dispatch({ type: AUTH_ERROR });
+    }
+  }
+
+  const resetPassword = async (newPassword, token) => {
+    const config = { headers: {'Content-Type': 'application/json'} };
+    const body = JSON.stringify({ newPassword, resetPasswordLink: token });
+
+    try {
+        const res = await axios.put('/api/auth/reset-password', body, config);
+        if (res.status === 200) {
+          props.history.push('/signin');
+        }
+    } catch (err) {
+      dispatch({ type: AUTH_ERROR });
+    }
+  }
+
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   return (
@@ -100,6 +125,8 @@ const AuthState = props => {
       register,
       login,
       logout,
+      resetPassword,
+      forgotPassword,
       loadUser
     }}>
       { props.children }

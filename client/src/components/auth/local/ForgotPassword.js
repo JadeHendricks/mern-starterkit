@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import React, { useState, useContext } from 'react';
+import AuthContext from '../../../context/authContext/AuthContext';
 
 const ForgotPassword = () => {
+    const { forgotPassword } = useContext(AuthContext);
     const [values, setValues] = useState({ email: '', buttonText: 'Submit' });
     const { email, buttonText } = values;
 
@@ -11,21 +10,8 @@ const ForgotPassword = () => {
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
+        forgotPassword(email);
         setValues({ ...values, buttonText: 'Submitting...' });
-
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ email });
-
-        try {
-            const res = await axios.put('/api/auth/forgot-password', body, config);
-
-            setValues({ ...values, buttonText: 'Submit' });
-            toast.success(res.data.message);
-
-        } catch (err) {
-            setValues({ ...values, buttonText: 'Submit' });
-            toast.error(err.response.data.message);
-        }
     }
     
     return (

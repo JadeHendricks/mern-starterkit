@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import AuthContext from '../../../context/authContext/AuthContext';
 import jwt from 'jsonwebtoken';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 
 const ResetPassword = ({ match }) => {
+    const { resetPassword } = useContext(AuthContext);
     const [values, setValues] = useState({ name: '', token: '', newPassword: '', buttonText: 'Submit' });
     const { name, token, newPassword, buttonText } = values;
 
@@ -23,22 +22,10 @@ const ResetPassword = ({ match }) => {
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         setValues({ ...values, buttonText: 'Submitting...' });
-
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ newPassword, resetPasswordLink: token });
-
-        try {
-            const res = await axios.put('/api/auth/reset-password', body, config);
-
-            setValues({ ...values, buttonText: 'Submit' });
-            toast.success(res.data.message);
-
-        } catch (err) {
-            setValues({ ...values, buttonText: 'Submit' });
-            toast.error(err.response.data.message);
-        }
+        resetPassword(newPassword, token);
+        setValues({ ...values, buttonText: 'Submit' });
     }
-    
+
     return (
         <section className="py-5">
             <div className="col-md-8 offset-md-2 col-12">
