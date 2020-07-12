@@ -4,7 +4,7 @@ import AuthContext from '../../../context/authContext/AuthContext';
 
 const ActivateAccount = ({ match }) => {
     const { activateAccount } = useContext(AuthContext);
-    const [values, setValues] = useState({ name: '', token: '', show: true });
+    const [values, setValues] = useState({ name: '', token: '' });
     const { name, token } = values;
 
     useEffect(() => {
@@ -18,14 +18,13 @@ const ActivateAccount = ({ match }) => {
 
     const handleActivationClick = async () => {
         activateAccount(token);
-        setValues({ ...values, name: '', token: '', show: false });
     }
     
     return (
         <section className="py-5">
             <div className="col-md-8 offset-md-2 col-12">
                 <div className="card border-secondary mb-3">
-                    <div className="card-header">Hello <strong className="text-success">{ name && name }</strong>, ready to activate you account?</div>
+                    <div className="card-header">Hello <strong className="text-success">{ name }</strong>, ready to activate you account?</div>
                     <div className="card-body">
                         <div className="row">
                             <div className="col-12">
