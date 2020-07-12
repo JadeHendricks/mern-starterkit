@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
+import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { LOGIN_SUCCESS, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
@@ -37,7 +38,10 @@ const AuthState = props => {
   }
 
   const externalAuthentication = (response) => {
-    dispatch({ type: USER_LOADED, payload: response.data.user});
+    toast.success('Login successful, welcome to the Mern Authentication Boilerplate.');
+    setTimeout(() => {
+      dispatch({ type: USER_LOADED, payload: response.data.user});
+    }, 4000);
   }
 
   const externalResponse = async (response) => {
@@ -80,8 +84,10 @@ const AuthState = props => {
     try {
         await axios.post('/api/auth/login', body, config);
         dispatch({ type: LOGIN_SUCCESS });
+        toast.success('Login successful, welcome to the Mern Authentication Boilerplate.');
         loadUser();
     } catch (err) {
+      toast.error(err.response.data.message);
       dispatch({ type: AUTH_ERROR });
     }
   }
@@ -91,18 +97,23 @@ const AuthState = props => {
     const body = JSON.stringify({ name, email, password });
 
     try {
-        await axios.post('/api/auth/register', body, config);
+        const res = await axios.post('/api/auth/register', body, config);
+        toast.success(res.data.message);
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
+      toast.success(err.response.data.message);
     }
   }
 
   const logout = async () => {
     try {
       const res = await axios.get('/api/auth/logout');
+      toast.success('Logging out');
       dispatch({ type: LOGOUT });
       if (res.data.message === 'success') {
-        window.location.reload(true);
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 4000);
       }
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
@@ -114,9 +125,11 @@ const AuthState = props => {
     const body = JSON.stringify({ email });
 
     try {
-        await axios.put('/api/auth/forgot-password', body, config);
+        const res = await axios.put('/api/auth/forgot-password', body, config);
+        toast.success(res.data.message);
     } catch (err) {
         dispatch({ type: AUTH_ERROR });
+        toast.error(err.response.data.message);
     }
   }
 
@@ -126,11 +139,33 @@ const AuthState = props => {
 
     try {
         const res = await axios.put('/api/auth/reset-password', body, config);
+        toast.success(res.data.message);
         if (res.status === 200) {
-          props.history.push('/signin');
+          setTimeout(() => {
+            props.history.push('/signin');
+          }, 4000);
         }
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
+      toast.error(err.response.data.message);
+    }
+  }
+
+  const activateAccount = async (token) => {
+    const config = { headers: {'Content-Type': 'application/json'} };
+    const body = JSON.stringify({ token });
+
+    try {
+        const res = await axios.post('/api/auth/account-activation', body, config);
+        toast.success(res.data.message);
+        setTimeout(() => {
+          if (res.status === 201) {
+            props.history.push('/signin');
+        }
+        }, 4000);
+    } catch (err) {
+        console.error(err.message);
+        toast.error(err.response.data.message);
     }
   }
 
@@ -148,6 +183,7 @@ const AuthState = props => {
       resetPassword,
       forgotPassword,
       externalResponse,
+      activateAccount,
       loadUser
     }}>
       { props.children }

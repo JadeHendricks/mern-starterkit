@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import jwt from 'jsonwebtoken';
-import axios from 'axios';
+import AuthContext from '../../../context/authContext/AuthContext';
 
-const ActivateAccount = ({ match, history }) => {
+const ActivateAccount = ({ match }) => {
+    const { activateAccount } = useContext(AuthContext);
     const [values, setValues] = useState({ name: '', token: '', show: true });
     const { name, token } = values;
 
@@ -16,25 +17,15 @@ const ActivateAccount = ({ match, history }) => {
     }, [match.params.token]);
 
     const handleActivationClick = async () => {
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ token });
-
-        try {
-            const res = await axios.post('/api/auth/account-activation', body, config);
-            setValues({ ...values, show: false });
-            if (res.status === 201) {
-                history.push('/signin');
-            }
-        } catch (err) {
-            console.error(err.message);
-        }
+        activateAccount(token);
+        setValues({ ...values, name: '', token: '', show: false });
     }
     
     return (
         <section className="py-5">
             <div className="col-md-8 offset-md-2 col-12">
                 <div className="card border-secondary mb-3">
-                    <div className="card-header">Hello <strong className="text-success">{ name }</strong>, ready to activate you account?</div>
+                    <div className="card-header">Hello <strong className="text-success">{ name && name }</strong>, ready to activate you account?</div>
                     <div className="card-body">
                         <div className="row">
                             <div className="col-12">

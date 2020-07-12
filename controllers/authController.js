@@ -66,7 +66,7 @@ exports.accountActivation = async (req, res) => {
         await User.create({ name, email, password });
 
         res.status(201).json({
-            message: 'Signup success. Please signin'
+            message: 'Activation successful. Please signin'
         });
         
     } catch (err) {
@@ -253,7 +253,7 @@ exports.resetPassword = async (req, res) => {
             await user.save();
     
             res.status(200).json({
-                message: 'Password has been updated'
+                message: 'Password has been updated, Login!'
             })
         }   
     } catch (err) {

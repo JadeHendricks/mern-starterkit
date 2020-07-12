@@ -7,7 +7,7 @@ import Facebook from '../external/Facebook';
 
 const Register = () => {
 
-    const { register, isAuthenticated } = useContext(AuthContext);
+    const { register, isAuthenticated, user } = useContext(AuthContext);
 
     const [values, setValues] = useState({ name: '', email: '', password: '', buttonText: 'Register' });
     const { name, email, password, buttonText } = values;
@@ -21,7 +21,7 @@ const Register = () => {
         setValues({ ...values, name: '', email: '', password: '', buttonText: 'Register' });
     }
 
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
         return <Redirect to='/dashboard' />;
     }
     

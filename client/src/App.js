@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './App.css';
 import Register from './components/auth/local/Register';
 import Login from './components/auth/local/Login';
@@ -22,7 +23,7 @@ function App(props) {
       <AuthState>
       <Fragment>
         <Loader />
-        <ToastContainer />
+        <ToastContainer autoClose={ 4000 } pauseOnHover={ false }/>
         <Navigation />
         <div className="container">
           <Switch>

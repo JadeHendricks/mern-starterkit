@@ -10,8 +10,9 @@ const ForgotPassword = () => {
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-        forgotPassword(email);
         setValues({ ...values, buttonText: 'Submitting...' });
+        forgotPassword(email);
+        setValues({ ...values, email: '', buttonText: 'Submit' });
     }
     
     return (

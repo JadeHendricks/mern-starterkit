@@ -6,7 +6,7 @@ import Facebook from '../external/Facebook';
 
 const Login = () => {
 
-    const { login, isAuthenticated }  = useContext(AuthContext);
+    const { login, isAuthenticated, user }  = useContext(AuthContext);
 
     const [values, setValues] = useState({ email: '', password: '', buttonText: 'Login' });
     const { email, password, buttonText } = values;
@@ -17,9 +17,10 @@ const Login = () => {
         e.preventDefault();
         setValues({ ...values, buttonText: 'Logging in...' });
         login(email, password);
+        setValues({ ...values, email: '', password: '', buttonText: 'Login' });
     }
 
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
         return <Redirect to='/dashboard' />;
     }
     
