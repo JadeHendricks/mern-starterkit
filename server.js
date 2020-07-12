@@ -38,5 +38,6 @@ app.use(mongoSanitize());
 app.use(xss());
 //Add a whitelist option if you allow duplicate parameters
 app.use(hpp());
+
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);

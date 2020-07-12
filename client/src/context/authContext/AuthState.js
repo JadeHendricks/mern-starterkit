@@ -63,6 +63,7 @@ const AuthState = props => {
         const res = await axios.post('/api/auth/google-login', body, config);   
         externalAuthentication(res);
       } catch (err) {
+          toast.error(err.response.data.message);
           dispatch({ type: AUTH_ERROR });
       } 
     }
