@@ -3,7 +3,6 @@ import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
-import cookie from 'js-cookie';
 import { LOGIN_SUCCESS, USER_LOADED, AUTH_ERROR, LOGOUT  } from '../types';
 
 const AuthState = props => {
@@ -38,10 +37,31 @@ const AuthState = props => {
   }
 
   const externalAuthentication = (response) => {
-    cookie.set('authtoken', response.data.token, {
-      expires: process.env.REACT_APP_COOKIE_EXPIRES_IN
-    });
-    isLoggedin();
+    dispatch({ type: USER_LOADED, payload: response.data.user});
+  }
+
+  const externalResponse = async (response) => {
+    if (response.graphDomain === 'facebook') {
+      const config = { headers: {'Content-Type': 'application/json'} };
+      const body = JSON.stringify({ accessToken: response.accessToken, userID: response.userID });
+  
+      try {
+          const res = await axios.post('/api/auth/facebook-login', body, config);
+          externalAuthentication(res)  
+      } catch (err) {
+        dispatch({ type: AUTH_ERROR });
+      } 
+    } else {
+      const config = { headers: {'Content-Type': 'application/json'} };
+      const body = JSON.stringify({ idToken: response.tokenId });
+
+      try {
+        const res = await axios.post('/api/auth/google-login', body, config);   
+        externalAuthentication(res);
+      } catch (err) {
+          dispatch({ type: AUTH_ERROR });
+      } 
+    }
   }
 
   const loadUser = async () => {
@@ -127,6 +147,7 @@ const AuthState = props => {
       logout,
       resetPassword,
       forgotPassword,
+      externalResponse,
       loadUser
     }}>
       { props.children }

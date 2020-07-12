@@ -1,24 +1,11 @@
 import React, { useContext } from 'react';
 import GoogleLogin from 'react-google-login';
-import axios from 'axios';
 import AuthContext from '../../../context/authContext/AuthContext';
 
 const Google = () => {
+    const { externalResponse } = useContext(AuthContext);
+    const responseGoogle = (response) => externalResponse(response);
 
-    const { externalAuthentication } = useContext(AuthContext);
-
-    const responseGoogle = async (response) => {
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const body = JSON.stringify({ idToken: response.tokenId });
-
-        try {
-            const res = await axios.post('/api/auth/google-login', body, config);   
-            externalAuthentication(res);
-        } catch (err) {
-            console.error(err.response);
-        } 
-    }
-    
     return (
         <div className='pb-3'>
             <GoogleLogin

@@ -278,6 +278,14 @@ exports.googleLogin = async (req, res) => {
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
                     expiresIn: 3600000
                 });
+
+                const cookieOptions = {
+                    expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+                    httpOnly: true
+                }
+                if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+                res.cookie('authtoken', token, cookieOptions);
+
                 const { _id, email, name, role } = user;
     
                 res.status(200).json({
@@ -297,6 +305,13 @@ exports.googleLogin = async (req, res) => {
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
                     expiresIn: 3600000
                 });
+
+                const cookieOptions = {
+                    expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+                    httpOnly: true
+                }
+                if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+                res.cookie('authtoken', token, cookieOptions);
     
     
                 res.status(200).json({
@@ -332,6 +347,13 @@ exports.facebookLogin = async (req, res) => {
             });
             const { _id, email, name, role } = user;
 
+            const cookieOptions = {
+                expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+                httpOnly: true
+            }
+            if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+            res.cookie('authtoken', token, cookieOptions);
+
             res.status(200).json({
                 token,
                 user: { _id, email, name, role }
@@ -349,6 +371,13 @@ exports.facebookLogin = async (req, res) => {
             const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
                 expiresIn: 3600000
             });
+
+            const cookieOptions = {
+                expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+                httpOnly: true
+            }
+            if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+            res.cookie('authtoken', token, cookieOptions);
 
 
             res.status(200).json({
